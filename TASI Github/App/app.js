@@ -1,5 +1,7 @@
-//Created 23.1.18 by Stephan Burkowski
 
+
+//Created 23.1.18 by Stephan Burkowski
+yeah mega github style
 //1. Packages einbinden
 var express = require("express");
 var session = require("express-session");
@@ -417,23 +419,23 @@ app.post("/adduebung", (req, res) => {
 });
 
 //Trainings handlen
-app.get("/training", (req, res) => {
+app.get("/trainingsplaene", (req, res) => {
     if(req.session.roleid == 1) {
-        squery = "SELECT TrainingsID FROM training WHERE TrainerID = ?";
+        squery = "SELECT TrainingsID FROM trainingsplaene WHERE TrainerID = ?";
         connection.query(squery, req.session.usid, function(err, result) {
 
             var id = result[0].TrainingsID;
-            var url = "/training/" + id;
+            var url = "/trainingsplaene/" + id;
             res.redirect(url);
         });
     }else if(req.session.roleid == 2) {
-        squery =    "SELECT training.TrainingsID, training.Bezeichnung FROM training, trainingszuweisung " + 
-                    "WHERE training.TrainingsID = trainingszuweisung.TrainingsID AND SpielerID = ?";
+        squery =    "SELECT trainingsplane.TrainingsID, training.Bezeichnung FROM training, trainingszuweisung " +
+                    "WHERE trainingsplaene.TrainingsID = trainingszuweisung.TrainingsID AND SpielerID = ?";
 
         connection.query(squery, req.session.usid, function(err, result) {
 
             var id = result[0].TrainingsID;
-            var url = "/training/" + id;
+            var url = "/trainingsplaene/" + id;
             res.redirect(url);
         });
     }
@@ -458,7 +460,7 @@ app.get("/training/:id", (req, res) => {
         
         connection.query(squery, train, function(err, result, fields) {
             var e = 0;
-            var length = result.length;                                    
+            var length = result.length;
             for(entry of result) {
                 uebung.push(entry);
 
@@ -487,7 +489,7 @@ app.get("/training/:id", (req, res) => {
                             connection.query(squery, req.session.usid, function(err, result) {
                                 for(entry of result) {
                                     allplans.push(entry);
-                                }                  
+                                }
                                 res.render("training", {
                                     trainingsbezeichnung: trainingsbezeichnung,
                                     uebung: uebung ,
@@ -498,7 +500,7 @@ app.get("/training/:id", (req, res) => {
                         }
 
                         } else if(req.session.roleid == 2) {
-                            squery =    "SELECT training.TrainingsID, training.Bezeichnung FROM training, trainingszuweisung " + 
+                            squery =    "SELECT training.TrainingsID, training.Bezeichnung FROM training, trainingszuweisung " +
                                         "WHERE training.TrainingsID = trainingszuweisung.TrainingsID AND SpielerID = ?";
 
                             connection.query(squery, req.session.usid, function(err, result) {
@@ -584,7 +586,7 @@ app.post("/saveplan", (req,res) => {
     var usid = req.session.user;
 
     if(mannschaft != "Mannschaft") {
-        var squery = "INSERT INTO training (TrainerID, MannschaftsID, Bezeichnung, beschreibung) VALUES ?";
+        var squery = "INSERT INTO trainingsplaene (TrainerID, MannschaftsID, Bezeichnung, beschreibung) VALUES ?";
         var values = [[usid, mannschaft, bezeichnung, beschreibung]];
         connection.query(squery, [values], function(err, result) {
             var lastid = result.insertId;
@@ -1208,136 +1210,6 @@ app.post("/deleteuser", (req, res) => {
         });
     });
 });
-
-
-// TASI 2019
-
-app.get("/tracking", (req, res) => {	
-	trainingsID = 1;
-	var allplans = [];
-	var uebung = [];
-	var training = [];
-				
-	var getPlans = function(callback){
-		if(req.session.roleid == 1) {
-			squery = "SELECT TrainingsID, Bezeichnung FROM training WHERE TrainerID = " + req.session.usid;
-			connection.query(squery, function(err, result) {
-				for(entry of result) {
-					allplans.push(entry);
-				}callback(allplans);
-			});
-		}
-	}		
-
-	getPlans(function(allplans){
-		res.render("tracking", {
-			trainingsbezeichnung: training,
-			uebung: uebung,
-			allplans: allplans,
-			roleid: req.session.roleid,
-			uebungsattribute: 0
-		});
-	});
-});
-
-
-app.post("/tracking", (req, res) => {
-	var uebungsIDs = [];
-	var allplans = [];
-	var uebung = [];
-	var training = [];
-          
-	var getTrainingsBezeichnung = function(trainingsID, callback){
-		var squery = "SELECT Bezeichnung FROM training WHERE TrainingsID = " + trainingsID;
-		connection.query(squery, function(err, result) {
-			callback(result);
-		});
-	}
-				
-	var getPlans = function(callback){
-		if(req.session.roleid == 1) {
-			squery = "SELECT TrainingsID, Bezeichnung FROM training WHERE TrainerID = " + req.session.usid;
-			connection.query(squery, function(err, result) {
-				for(entry of result) {
-					allplans.push(entry);
-				}callback(allplans);
-			});
-		}
-	}
-				
-	var getUebungsattribute = function(uebungsID, callback){
-		var attributeIDs = [];
-		squery = "SELECT UebungsattributID FROM attributzuweisung WHERE UebungsID = " + uebungsID;	
-		connection.query(squery, function(err, result) {
-			for(entry of result){
-				attributeIDs.push(entry.UebungsattributID);	
-			}
-			squery = "SELECT * FROM uebungsattribute WHERE UebungsattributID IN (" + attributeIDs + ")" ;
-			connection.query(squery, function(err, result) {
-				callback(result);
-			});  
-		});
-	}
-	
-	var getUebungsIDs = function(trainingsID, allplans, training, uebungsattribute){
-		squery = "SELECT UebungsID FROM uebungszuweisung WHERE TrainingsID = " + trainingsID;
-		connection.query(squery, function(err, result) {
-			for(entry of result){
-				uebungsIDs.push(entry.UebungsID);
-			}getUebungen(uebungsIDs, allplans, training, uebungsattribute);
-		});
-	}
-	
-	var getUebungen = function(uebungsIDs, allplans, training, uebungsattribute){
-		squery = "SELECT * FROM uebungen  WHERE UebungsID IN (" + uebungsIDs + ")" ;
-		connection.query(squery, function(err, result) {
-			res.render("tracking", {
-				trainingsbezeichnung: training[0].Bezeichnung,
-				uebung: result,
-				allplans: allplans,
-				roleid: req.session.roleid,
-				uebungsattribute: uebungsattribute
-			});
-		});
-	}
-	
-	var getUebungsBezeichnung = function(uebungsID, callback){
-		squery = "SELECT Bezeichnung FROM uebungen  WHERE UebungsID = " + uebungsID;
-		connection.query(squery, function(err, result) {
-			callback(result);
-		});
-	};
-		
-	if(req.body.trainingsID){
-		session.trainingsID = req.body.trainingsID;
-		uebungsattribute = 0;
-			getTrainingsBezeichnung(req.body.trainingsID, function(training){
-				getPlans(function(allplans){
-					getUebungsIDs(req.body.trainingsID, allplans, training, uebungsattribute);
-				});
-			});
-
-	}
-                    
-	if(req.body.uebung){
-		session.uebungsID = req.body.uebung;
-		getUebungsattribute(session.uebungsID, function(uebungsattribute){
-			getTrainingsBezeichnung(session.trainingsID, function(training){
-				getPlans(function(allplans){
-					getUebungsIDs(session.trainingsID, allplans, training, uebungsattribute);
-				});
-			});
-		});
-	}
-	
-	if(req.body.uebungsattribut){
-		console.log(req.body.uebungsattribut);
-	}
-	
-});
-
-
-// TASI 2019 END
 
 function removeDuplicates(originalArray, prop) {
     var newArray = [];
