@@ -1,0 +1,86 @@
+﻿uebungen (UebungsID) hier werden die Daten zu Übungen abgespeichert
+training (TrainingsID) hier werden Trainingspläne erstellt
+
+uebungszuweisung
+- verknüpft UebungsID + TrainingsID
+
+Alle Übungen eines Trainings anzeigen:
+- hole mir alle UebungID mit TrainingsID "x" aus uebungszuweisung
+	- Liste mir alle Übungen und deren Attribute auf
+		- hole in Schleife jede Übung anhand der UebungsID aus uebungen
+
+
+uebungsparameter
+- uebungsparameterID
+- Parameter (z.B. Geschwindigkeit, Dauer, Gewicht etc.)
+
+uebungsparameterzuweisung
+- verknüpft UebungsID + uebungsparameter
+	> jede UebungsID kann n Parameter haben (1:n)
+
+Also ich hab mir gerade nochmal ein paar Gedanken gemacht und versuche das mal zu erklären. Zur Zeit kann man ja Übungen anlegen, die dann einen Namen, eine Beschreibung usw. haben. Wenn ich jetzt eine Übung ausführen möchte, und dabei auch meine Ergebnisse notieren möchte muss ich ja folgendes wissen:
+Welche Parameter möchte ich messen? (Geschwindigkeit, Wiederholungen, Gewicht etc.)
+D.h. jede Übung muss sozusagen wissen, welche Parameter sinnvollerweise zu ihr gehören. 
+Das funktioniert indem wir eine Tabelle anlegen, die alle möglichen Parameter zu den verschiedenen Übungen enthält und natürlich auch erweitert werden kann.
+Jetzt erstellt man eine zweite Tabelle (man könnte es als Hilfstabelle bezeichnen) in der dafür gesorgt wird, dass jede Übung gesagt bekommt, welche Parameter zu ihr gehören.
+Die Tabellen kann man sich so vorstellen:
+
+TABELLE uebungsparameter:
+1. UebungsparameterID
+2. Parameter (z.B. Geschwindigkeit, Dauer, Gewicht etc.)
+Hier bekommt einfach jeder Parameter eine einzigartige ID: 
+UebungsparameterID 1, Geschwindigkeit
+UebungsparameterID 2, Dauer
+
+TABELLE uebungsparameterzuweisung:
+1. UebungsparameterID
+2. UebungsID 
+Das hier ist die Hilfstabelle in der ich eine UebungsID mit beliebig vielen Parametern verknüpfe.
+Sieht dann in etwa so aus: 
+UebungsID 1, UebungsparameterID 1
+UebungsID 1, UebungsparameterID 5
+UebungsID 1, UebungsparameterID 2
+UebungsID 2, UebungsparameterID 1
+UebungsID 2, UebungsparameterID 3
+UebungsID 2, UebungsparameterID 8
+
+Wenn ich so eine Tabelle habe kann ich sagen, hol mir Übung 1 und erstelle mir für jeden Parameter der dazugehört ein Eingabefeld, in das ich meine Leistung eintragen kann.
+
+
+
+Table Workouts
+UniqueID(CurrentDate) | SpielerID | UebungsID | WertID(inc)
+
+Table Werte
+WertID | UebungsparameterID | Wert
+
+Ich möchte für Oliver den Wert 20 Wdh. Medizinball in 30s eintragen
+> Speichere in Table(Workouts): WertID(unique) + Datum + SpielerID(Oliver) + UebungsID(Medizinball)
+> Speichere in Table(Werte): WertID + UebungsparameterID(Wdh.) + Wert(20)
+> Speichere in Table(Werte): WertID + UebungsparameterID(s) + Wert(30)
+
+Ich möchte für Oliver die Werte der Übung Medizinball abrufen
+> Suche in Table(Workouts): SpielerID(Oliver) + UebungsID(Medizinball)
+> Liefert alle Einträge für WertID
+> Selektiere aus diesem Ergebnis die aktuelle WertID
+> Suche in Table(Werte) nach der selektierten WertID
+> Liefert Uebungsparameter(Wdh.) mit dem Wert(20) + Uebungsparameter(s) mit dem Wert(30)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

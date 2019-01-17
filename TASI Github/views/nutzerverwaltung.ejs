@@ -1,0 +1,194 @@
+<script>
+  function showuser(p1) {
+
+    $.ajax({
+      url: "/showuser",
+      method: "POST",
+      data: {
+        usid: p1
+      },
+      dataType: "JSON",
+      success: function(data) {
+        var htmlinput = "";
+        
+        htmlinput += '<p>' + data.vorname + " " + data.nachname + '</p><p>' + data.status + '</p><p>' + data.mannschaft + '</p><p>' + data.position + '</p><p>' + data.geburtstag + '</p><p>' + data.mail + '</p><p>' + data.adresse + '</p>;'
+
+        document.getElementById("userparas").innerHTML = htmlinput;
+        htmlinput = '<h4>' + data.vorname + " " + data.nachname + '<a id="userid" name=' + data.nutzerID + '></h4>';
+        document.getElementById("userparas2").innerHTML = htmlinput;
+
+      }
+
+    });
+  }
+
+  function changeuser() {
+    var route = "/nutzerverwaltung/user/" + document.getElementById("userid").name;
+    window.location.href = route;
+  }
+
+  function deleteuser() {
+    var userid = document.getElementById("userid").name;
+    $.ajax({
+      url: "/deleteuser",
+      method: "POST",
+      data: {
+        userid: userid
+      },
+      success: function(data) {
+        alert("User gelöscht");
+        window.location.href = "/nutzerverwaltung";
+      }
+    });
+  }
+</script>
+
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Profil - TASI Trainingsassistent</title>
+    <link rel="stylesheet" href="/css/960_12_col.css" />
+    <link rel="stylesheet" href="/css/reset_rtl.css" />
+    <link rel="stylesheet" href="/css/formatierung.css" />
+
+    <!-- Menü -->
+    <script src='/js/menu3.0.0.js' type='text/javascript'></script>
+    <script src='/js/menu.js'></script>
+
+  </head>
+
+
+  <body onload="showuser(<%= users[0].NutzerID %>)">
+    <div class="container_12">
+
+
+              <!--Menü-->
+              <div class="grid_12">
+                  <a href="/profil.html"><img src="Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
+                  <div class="nav">
+                
+                  <ul class='menu'>
+                  <li><a  href="/start">Profil</a></li>
+                  <li><a  href="/uebungssammlung">Übungen</a></li>
+                  <li><a  href="/training">Training</a></li>
+                  <% if (roleid == 1) { %>
+                    <li><a href="trainer.html">Trainerbereich</a>
+                        <ul class='submenu'>
+                            <li><a href="/createtrainingplan">Plan erstellen</a></li>
+                            <li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
+                        </ul>
+                    </li>
+                  <% } %>
+                  <% if(roleid == 2) { %>
+                    <li><a href="trainerbereich.html">Spielerbereich</a></li>
+                  <% } %>
+                  <li><a href="/logout">Ausloggen</a></li>
+                </ul></div>
+                </div>
+                <div class="grid_12">
+                  <h1>Nutzerverwaltung</h1>
+                </div>
+              <hr>
+
+      <div class="grid_6">
+        <h4>Nutzer verwalten</h4>
+      </div>
+
+      <div class="grid_6" id="userparas2">
+        <h4>Neuer User</h4>
+      </div>
+
+
+      <div class="grid_6">
+        <a href="/nutzerverwaltung/user/0"><img src="/bilder/plus.png" width="15" alt="bearbeiten"/>&nbsp; Neuen User anlegen</a>
+      <br></br>
+
+      <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Nach Namen suchen.." title="Type in a name">
+      <div class="scroll">
+
+        <table id="myTable">
+          <% console.log(users); %>
+          <% for(entry of users) { %>
+              <tr onclick="showuser(<%= entry.NutzerID %>)">
+                <td><div id="<%= entry.NutzerID %>" class="roundgravatar" style='background: url("/<%= entry.bild %>");'></div></td>
+                <td><%= entry.vorname %> <%= entry.nachname %></td>
+                <td><%= entry.email %></td>
+              </tr>
+          <% } %>
+        </table>
+      </div>
+
+
+      <script>
+      function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[1];
+          if (td) {
+            if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+      }
+      </script>
+      <br></br>
+    </div>
+
+    <div class="grid_2" style="margin-top:33px">
+      <h6>Name</h6>
+      <h6>Status</h6>
+      <h6>Mannschaft</h6>
+      <h6>Position</h6>
+      <h6>Geburtstag</h6>
+      <h6>E-Mail</h6>
+      <h6>Adresse</h6>
+      <!-- <h6>Anmerkungen</h6> -->
+    </div>
+
+    <div class="grid_2" style="margin-top:33px" id="userparas">
+      <p>Name</p>
+      <p>Status</p>
+      <p>Mannschaft</p>
+      <p>Position</p>
+      <p>Geburtstag</p>
+      <p>E-Mail</p>
+      <p>Adresse</p>
+      <p>krankgeschrieben bis Mai wegen Fußverletzung</p>  
+    </div>
+
+
+    <div class="grid_2" style="margin-top:33px" id="userpicture">
+      <div class="roundgravatar2" style="background: url('bilder/spieler1.jpg');"></div>
+      <br><br>
+      <a onclick="deleuteuser()"><p><img src="/Bilder/rubbish-bin.png" width="15" alt="loeschen" />  User löschen</p></a>
+      <a onclick="changeuser()"><p><img src="/Bilder/edit.png" width="15" alt="bearbeiten" />  User bearbeiten </p></a>
+
+    </div>
+
+
+
+
+
+
+
+    </br>
+
+    <hr>
+
+        <div class="grid_12">
+          <p align="right">Kontakt | Impressum </p>
+        </div>
+
+    </div>
+    <!-- end .container_12 -->
+
+  </body>
+</html>

@@ -1,0 +1,162 @@
+<script>
+
+    function favo(p1, p2, p3) {
+      $.ajax({
+        url: "/favo",
+        method: "POST",
+        data: {
+          uebung: p2,
+          favorized: p1,
+          page: p3
+        },
+        success: function(data) {
+          window.location.reload(true);
+        }
+      })
+    }
+
+    function anfuegen(p1, p2) {
+      if(p1 == "none") {
+        document.getElementById("noteam").style.display="inline";
+        console.log(document.getElementById("noteam").type);
+      } else {
+        $.ajax({
+          url: "/adduebung",
+          method: "POST",
+          data: {
+            uebung: p2,
+            plan: p1
+          },
+          success: function(data) {
+            window.location.reload(true);
+          }
+        })
+      }
+      
+    }
+</script>
+
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Profil - TASI Trainingsassistent</title>
+    <link rel="stylesheet" href="/css/960_12_col_rtl.css" />
+    <link rel="stylesheet" href="/css/reset_rtl.css" />
+    <link rel="stylesheet" href="/css/formatierung.css" />
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src='js/menu.js'></script>
+
+  </head>
+
+
+  <body>
+    <div class="container_12">
+
+
+
+
+  <!--Menü-->
+  <div class="grid_12">
+      <a href="/profil.html"><img src="/Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
+      <div class="nav">
+    
+      <ul class='menu'>
+      <li><a  href="/start">Profil</a></li>
+      <li><a  href="/uebungssammlung">Übungen</a></li>
+      <li><a  href="/training">Training</a></li>
+      <% if (roleid == 1) { %>
+        <li><a href="trainer.html">Trainerbereich</a>
+            <ul class='submenu'>
+                <li><a href="/createtrainingplan">Plan erstellen</a></li>
+                <li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
+            </ul>
+        </li>
+      <% } %>
+      <% if(roleid == 2) { %>
+        <li><a href="trainerbereich.html">Spielerbereich</a></li>
+      <% } %>
+      <li><a href="/logout">Ausloggen</a></li>
+    </ul></div>
+    </div>
+        <!-- Menü Ende -->
+
+
+      <div class="grid_12">
+          <h1><%= uebungsname %></h1>
+      </div>
+      <hr>
+
+      <div class="grid_6">
+        <h4>Anleitung</h4>
+      </div>
+
+      <div class="grid_6">
+        <h4>Trainingsvideo</h4>
+      </div>
+
+      <div class="grid_6">
+
+        <div id="bereich">
+          <p>Kategorie: <%= uebungskat %> | Unterkategorie: <%= uebungssubkat %> | Niveau: <%= niveau %> | Hilfsmittel: <%= hilfsmittel %> | Dauer: <%= dauer %></p>
+        </div>
+
+        <%= beschreibung %>
+        <br>
+        <br>
+
+
+        <div class="grid_6 alpha">
+          <p>  
+            
+            <% if(favourite == false) { %>
+              <img src="/Bilder/star-01.png" width="15" alt="favorit" onclick="favo(<%= favourite %>, <%= uebid %>)"/>
+              <a onclick="favo(<%= favourite %>, <%= uebid %>, 1)">Übung zu Favoriten hinzufügen</a>
+            <% } else if(favourite == true) { %>
+              <img src="/Bilder/star-02.png" width="15" alt="favorit" onclick="favo(<%= favourite %>, <%= uebid %>)"/>
+              <a onclick="favo(<%= favourite %>, <%= uebid %>, 1)">Übung aus Favoriten entfernen</a>
+            <% } %>
+            
+          </p>
+        </div>
+
+        <div class="grid_4 omega">
+          <select class="auswahl" name="Trainingsplan" id="optionplans">
+            <option disabled selected value="none">Bitte auswählen:</option>
+
+            <% for(let entry of plan) { %>
+              <option value="<%= entry.TrainingsID %>"><%= entry.Bezeichnung %></option>
+            <% } %>
+              
+          </select> 
+
+          <button class="uebungenanfuegen" onclick="anfuegen(document.getElementById('optionplans').value, <%= uebid %>)">Hinzufügen</button>
+          
+        </div>
+
+        <div class="grid_2 alpha">
+          <p>Trainingsplan zuordnen</p>
+          <a id="noteam" style="display:none"><p>Bitte Team wählen</p></a>
+        </div>
+
+      </div>
+
+      <div class="grid_6">
+        <iframe src="<%= video %>" width="460" height="260" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe><br>
+      </div>
+
+      <hr>
+
+      <div class="grid_6">
+        <p align="right">Kontakt | Impressum </p>
+      </div>
+
+    </div>
+    <!-- end .container_12 -->
+
+  </body>
+
+</html>
+

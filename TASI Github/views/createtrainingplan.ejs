@@ -1,0 +1,517 @@
+<script>
+  function get_value(e) {
+    if(e.id == "mannschaftselect") {
+      var a = document.getElementById("mannschaftselect");
+      var b = e.options[e.selectedIndex].value;
+      a.name = b;
+    }else if(e.id == "spielerselect"){
+      var c = document.getElementById("spielerselect");
+      var d = e.options[e.selectedIndex].value;
+      c.name = d;
+    }else if(e.id == "neworchange"){
+      var f = document.getElementById("neworchange");
+      var g = e.options[e.selectedIndex].value;
+      f.name = g;
+      newornot();
+    }
+  }
+
+  function newornot() {
+    if(document.getElementById("neworchange").name == "newplan") {
+      document.getElementById("buttonfinish").name = "createplan";
+    }else {
+      document.getElementById("buttonfinish").name = "changeplan";
+      var plan = document.getElementById("neworchange");
+      plan2 = plan.options[document.getElementById("neworchange").selectedIndex].value;
+
+      $.ajax({
+        url: "/calluebungen",
+        method: "POST",
+        data: {
+          plan: plan2
+        },
+        dataType: "JSON",
+        success: function(data) {
+          if(data[0].MannschaftsID != null) {
+            console.log(document.getElementById("mannschaftselect"));
+            document.getElementById("mannschaftselect").value = data[0].MannschaftsID;
+            document.getElementById("mannschaftselect").name = data[0].MannschaftsID;
+          }
+          if(data[0].SpielerID != undefined) {
+
+            console.log(document.getElementById("spielerselect").textContent);
+            document.getElementById("spielerselect").value = data[0].SpielerID;
+            document.getElementById("spielerselect").name = data[0].SpielerID;
+          }
+          document.getElementById("trainingsbeschreibung").value = data[0].Beschreibung;
+          document.getElementById("trainingsbezeichnung").value = data[0].Bezeichnung;
+          var voruebung = "";
+          for(entry of data[0].Uebung) {
+            voruebung += "<option value=" + entry.UebungsID + " class='uebung'><p>" + entry.Bezeichnung + "</p></options>";
+          }
+
+          document.getElementById("traininglist").innerHTML = voruebung;
+        }
+      });
+      
+
+    }
+  }
+
+  function planhandling() {
+    var handling = document.getElementById("buttonfinish").name;
+    if(handling == "createplan") {
+      createplan();
+    }else {
+     changeplan();
+    }
+  }
+
+  function plandatabase(createorchange, uebungen, mannschaft, spieler, bezeichnung, beschreibung, trainingsid){
+    if(createorchange == "create"){
+      $.ajax({
+        url: "/saveplan",
+        method: "POST",
+        data: {
+          mannschaft: mannschaft,
+          spieler: spieler,
+          bezeichnung: bezeichnung,
+          beschreibung: beschreibung,
+          uebungen: uebungen
+        },
+        success: function(data) {
+          alert("Plan wurde erfolgreich gespeichert");
+        }
+      });
+
+    } else if(createorchange == "change") {
+      $.ajax({
+        url: "/changeplan",
+        method: "POST",
+        data: {
+          mannschaft: mannschaft,
+          spieler: spieler,
+          bezeichnung: bezeichnung,
+          beschreibung: beschreibung,
+          uebungen: uebungen,
+          trainingsid: trainingsid
+        },
+        success: function(data) {
+          alert("Success");
+        }
+      });
+    }
+
+  }
+
+  function changeplan() {
+    if(document.getElementById("buttonfinish").name == "createplan") {
+      var createorchange = "create";
+    } else if(document.getElementById("buttonfinish").name == "changeplan") {
+      var createorchange = "change";
+    }
+    var uebs = document.getElementById("traininglist").getElementsByClassName("uebung");
+    var uebungen = [];
+    var mannschaft = document.getElementById("mannschaftselect").name;
+    var spieler = document.getElementById("spielerselect").name;
+    var bezeichnung = document.getElementById("trainingsbezeichnung").value;
+    var beschreibung = document.getElementById("trainingsbeschreibung").value;
+    var trainingsid = document.getElementById("neworchange").name;
+
+    if(bezeichnung == "") {
+      alert("Bitte Bezeichnung eingeben");
+    } else {
+      if(beschreibung == "") {
+        alert("Bitte Beschreibung eingeben");
+      }else {
+        if(uebs.length == 0) {
+          alert("Bitte Übungen auswählen");
+        } else if(uebs.length != 0) {
+          for(entry of uebs) {
+            uebungen.push(entry.value);
+          }
+          if(mannschaft == "Mannschaft" && spieler == "Spieler") {
+            alert("Bitte Mannschaft oder Spieler auswählen");
+          } else if (mannschaft != "Mannschaft" && spieler != "Spieler") {
+            alert("Bitte nur Mannschaft ODER Spieler auswählen");
+          } else {
+            plandatabase(createorchange, uebungen, mannschaft, spieler, bezeichnung, beschreibung, trainingsid);
+          } 
+        }
+      }
+    }
+  }
+
+  function createplan() {
+    if(document.getElementById("buttonfinish").name == "createplan") {
+      var createorchange = "create";
+    } else if(document.getElementById("buttonfinish").name == "changeplan") {
+      var createorchange = "change";
+    }
+    var uebs = document.getElementById("traininglist").getElementsByClassName("uebung");
+    var uebungen = [];
+    var mannschaft = document.getElementById("mannschaftselect").name;
+    var spieler = document.getElementById("spielerselect").name;
+    var bezeichnung = document.getElementById("trainingsbezeichnung").value;
+    var beschreibung = document.getElementById("trainingsbeschreibung").value;
+    var trainingsid = false;
+    if(bezeichnung == "") {
+      alert("Bitte Bezeichnung eingeben");
+    } else {
+      if(beschreibung == "") {
+        alert("Bitte Beschreibung eingeben");
+      }else {
+        if(uebs.length == 0) {
+          alert("Bitte Übungen auswählen");
+        } else if(uebs.length != 0) {
+          for(entry of uebs) {
+            uebungen.push(entry.value);
+          }
+          if(mannschaft == "Mannschaft" && spieler == "Spieler") {
+            alert("Bitte Mannschaft oder Spieler auswählen");
+          } else if (mannschaft != "Mannschaft" && spieler != "Spieler") {
+            alert("Bitte nur Mannschaft ODER Spieler auswählen");
+          } else {
+            plandatabase(createorchange, uebungen, mannschaft, spieler, bezeichnung, beschreibung, trainingsid);
+          } 
+        }
+      }
+    }
+
+  }
+  
+  function filter(p1) {
+    if(p1 != null) {
+      var allselected = p1;
+      var favorized = "";
+      var kategorie = [];
+      var subkategorie = [];
+      var niveau = [];
+      var dauer = [];
+      var xhttp = "";
+      var filterfavo = false;
+      
+      if(allselected[0] == 1) {
+        filterfavo = true;
+      }
+      
+
+      for(entry of allselected){
+          if(entry == "Kraft" || entry == "Schnelligkeit" || entry == "Ausdauer" || entry == "Beweglichkeit") {
+              kategorie.push(entry);
+          }if(entry == "Schnellkraft" || entry == "Kraftausdauer" || entry == "Maximalkraft" || entry == "Reaktivkraft" || entry == "Langzeitausdauer" || entry == "Koordination" || entry == "Kurzzeitausdauer" || entry == "Mittelzeitausdauer" || entry == "Motorische Schnelligkeit" || entry == "Handlungsschnelligkeit") {
+              subkategorie.push(entry);
+          }if(entry == "Beweglichkeit (UK)") {subkategorie.push(entry);
+          }if(entry == "Kraft (UK)") {subkategorie.push(entry);
+          }if(entry == "Schnelligkeit (UK)") {subkategorie.push(entry);
+          }if(entry == "Ausdauer (UK)") {subkategorie.push(entry);
+          }if(entry == "einfach" || entry == "medium" || entry == "schwer") {
+              niveau.push(entry);
+          }if(entry == "kurz" || entry == "mittel" || entry == "lang") {
+              dauer.push(entry);
+          }
+      }
+
+      var xhr = $.ajax({
+          url: "/filter3",
+          method: "POST",
+          data: {
+              kategorie: kategorie,
+              subkategorie: subkategorie,
+              niveau: niveau,
+              dauer: dauer,
+              favo: filterfavo
+          },
+          dataType: "JSON",
+          success: function(data) {      
+            var htmlinput = "";
+            console.log(data[1]);
+            for(entry of data[0]) {
+              if(data[1] == "true" && entry.favourite == true) {
+                htmlinput += '<option value="' + entry.UebungsID + '" class="uebung"><p>' + entry.Bezeichnung + '</p></option>';
+              }if(data[1] == "false") {
+                htmlinput += '<option value="' + entry.UebungsID + '" class="uebung"><p>' + entry.Bezeichnung + '</p></option>';
+              }
+            }
+            document.getElementById("uebungenlist").innerHTML = htmlinput;              
+          }
+      });
+    } else {
+      window.location.reload();
+    }
+      
+  }
+
+
+</script>
+
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>Profil - TASI Trainingsassistent</title>
+    <link rel="stylesheet" href="/css/960_12_col.css" />
+    <link rel="stylesheet" href="/css/reset_rtl.css" />
+    <link rel="stylesheet" href="/css/formatierung.css" />
+    <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.selectlistactions.js"></script>
+
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/training.css">
+
+    <link href="/css/jquery.multiselect.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/js/jquery.multiselect.js"></script>
+    <script src="/js/menu.js"></script>
+
+    <style>
+      .ms-options-wrap > .ms-options > ul li.selected label,
+      .ms-options-wrap > .ms-options > ul label:hover {
+      background-color: #367ec3;
+      color: #ffffff
+      }
+    </style>
+  </head>
+
+
+  <body>
+
+    <div class="container_12">
+
+
+
+      <!--Menü-->
+      <div class="grid_12">
+          <a href="/profil.html"><img src="Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
+          <div class="nav">
+        
+          <ul class='menu'>
+          <li><a  href="/start">Profil</a></li>
+          <li><a  href="/uebungssammlung">Übungen</a></li>
+          <li><a  href="/training">Training</a></li>
+          <% if (roleid == 1) { %>
+            <li><a href="trainer.html">Trainerbereich</a>
+                <ul class='submenu'>
+                    <li><a href="/createtrainingplan">Plan erstellen</a></li>
+                    <li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
+                </ul>
+            </li>
+          <% } %>
+          <% if(roleid == 2) { %>
+            <li><a href="trainerbereich.html">Spielerbereich</a></li>
+          <% } %>
+          <li><a href="/logout">Ausloggen</a></li>
+        </ul></div>
+        </div>
+
+      <div class="grid_12">
+        <h1>Trainingsplan erstellen</h1>
+      </div>
+      <hr>
+
+      <div class="grid_5">
+        <h4>Übungen auswählen</h4>
+      </div>
+
+      <div class="grid_2">
+        <p></p>
+      </div>
+
+      <div class="grid_5">
+        <h4>Trainingsplan erstellen</h4>
+      </div>
+
+        <!--Filter-->
+
+      <div class="grid_5">
+
+      <select name="basic[]" multiple="multiple" >
+
+          <option value="1">Favoriten</option>
+
+          <optgroup label="Kategorie">
+            <option value="Kraft">Kraft</option>
+            <option value="Ausdauer">Ausdauer</option>
+            <option value="Schnelligkeit">Schnelligkeit</option>
+            <option value="Beweglichkeit">Beweglichkeit</option>
+          </optgroup>
+          <optgroup label="Unterkategorie">
+            <option value="Schnellkraft">Schnellkraft</option>
+            <option value="Kraftausdauer">Kraftausdauer</option>
+            <option value="Maximalkraft">Maximalkraft</option>
+            <option value="Reaktivkraft">Reaktivkraft</option>
+            <option value="Beweglichkeit (UK)">Beweglichkeit</option>
+            <option value="Koordination">Koordination</option>
+            <option value="Kraft (UK)">Kraft</option>
+            <option value="Langzeitausdauer">Langzeitausdauer</option>
+            <option value="Mittelzeitausdauer">Mittelzeitausdauer</option>
+            <option value="Kurzzeitausdauer">Kurzzeitausdauer</option>
+            <option value="Schnelligkeit (UK)">Schnelligkeit</option>
+            <option value="Ausdauer (UK)">Ausdauer</option>
+            <option value="Motorische Schnelligkeit">Motorische Schnelligkeit</option>
+            <option value="Handlungsschnelligkeit">Handlungsschnelligkeit</option>
+          </optgroup>
+          <optgroup label="Niveau">
+            <option value="einfach">einfach</option>
+            <option value="medium">medium</option>
+            <option value="schwer">schwer</option>
+          </optgroup>
+          <optgroup label="Dauer">
+            <option value="kurz">kurz</option>
+            <option value="mittel">mittel</option>
+            <option value="lang">lang</option>
+          </optgroup>
+        </select>
+
+        <script>
+        $('select[multiple]').multiselect({
+            columns  : 2,
+            search   : true,
+            selectAll: true,
+            texts    : {
+                placeholder: 'Filtern nach...'
+            }
+        });
+        </script>
+      </div>
+
+      <div class="grid_2">
+        <button class="uebungenanfuegen" style="width:140px" onclick="filter($('select[multiple]').val())">Filtern</button>
+      </div>
+
+      <div class="grid_5">
+        <select class="auswahl" name="Spieler" id="neworchange" onchange="get_value(this)">
+          <option disabled selected>Trainingsplan auswählen</option>
+          <optgroup label="Neu">
+            <option value="newplan">Neuer Trainingsplan</option>
+          </optgroup>
+          <optgroup label="Bestehende Pläne">
+            <% for(entry of plans) { %>
+              <option value=<%= entry.TrainingsID %> ><%= entry.Bezeichnung %></option>
+            <% } %>
+          </optgroup>
+        </select>
+        <!--<button class="uebungenanfuegen" style="width:38px" onclick="newornot()">Ok</button>-->
+      
+      </div>
+      
+      
+      <br>
+      <div class="clear"></div>
+
+      <!--Plugin-->
+
+      <div class="grid_5">
+        <select multiple class="form-control" id="uebungenlist">
+          <% for(entry of uebungen) { %>
+            <option value="<%= entry.UebungsID %>" class="uebung"><p><%= entry.Bezeichnung %></p></option>
+          <% } %>
+        </select>
+      </div>
+
+      <div class="grid_2">
+        <input type='button' id='btnAllRight' value='>>' class="btn btn-default" /><br>
+        <input type='button' id='btnRight' value='>' class="btn btn-default" /><br>
+        <input type='button' id='btnLeft' value='<' class="btn btn-default" /><br>
+        <input type='button' id='btnAllLeft' value='<<' class="btn btn-default" />
+      </div>
+
+      <div class="grid_5">
+        <div class="selected-left">
+          <select multiple class="form-control" id="traininglist">
+
+          </select>
+        </div>
+
+        <div class="selected-right">
+          <button type="button" class="btn btn-default btn-sm" id="btnUp">
+            <span class="glyphicon glyphicon-chevron-up"></span>
+          </button>
+          <button type="button" class="btn btn-default btn-sm" id="btnDown">
+            <span class="glyphicon glyphicon-chevron-down"></span>
+          </button>
+          <button type="button" class="btn btn-default btn-sm" id="btnRemove">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+        </div>
+
+        <div>
+            <label for="text">Bezeichnung</label><br>
+              <textarea id="trainingsbezeichnung" name="text" rows="1" style="width:334px"></textarea>
+        </div>
+        <br>
+
+        <div>
+            <label for="text">Beschreibung Trainingsplan</label><br>
+              <textarea id="trainingsbeschreibung" name="text" rows="4" style="width:334px"></textarea>
+        </div>
+        <br>
+
+        Mannschaft zuweisen: <select class="auswahl" value="Mannschaft" name="Mannschaft" id="mannschaftselect" onchange="get_value(this)">
+          <option value="Mannschaft" disabled selected>Bitte auswählen:</option>
+          <% for(let entry of mannschaft) { %>
+            <option value="<%= entry.MannschaftsID %>"><%= entry.Bezeichnung %></option>
+          <% } %>
+        </select>
+        <br>
+        Spieler zuweisen: <select class="auswahl" value="Spieler" name="Spieler" id="spielerselect" onchange="get_value(this)">
+          <option value="Spieler" disabled selected>Bitte auswählen:</option>
+          <% for(let entry of spieler) { %>
+            <option value="<%= entry.NutzerID %>"><%= entry.vorname %> <%= entry.nachname%></option>
+          <% } %>
+        </select>
+        <br></br>
+        <input type="submit" class="btn btn-primary" value="Trainingsplan speichern" onclick="planhandling()" id="buttonfinish" name="createplan" style="width: 333px">
+        <br></br>
+      </div>
+
+      <script>
+
+        $('#btnRemove').click(function (e) {
+            $('select').removeSelected('#traininglist');
+            e.preventDefault();
+        });
+
+        $('#btnUp').click(function (e) {
+            $('select').moveUpDown('#traininglist', true, false);
+            e.preventDefault();
+        });
+
+        $('#btnDown').click(function (e) {
+            $('select').moveUpDown('#traininglist', false, true);
+            e.preventDefault();
+        });
+
+
+        $('#btnRight').click(function (e) {
+            $('select').moveToList('#uebungenlist', '#traininglist');
+            e.preventDefault();
+        });
+
+        $('#btnAllRight').click(function (e) {
+            $('select').moveAllToList('#uebungenlist', '#traininglist');
+            e.preventDefault();
+        });
+
+        $('#btnLeft').click(function (e) {
+            $('select').removeSelected('#traininglist', '#uebungenlist');
+            e.preventDefault();
+        });
+
+        $('#btnAllLeft').click(function (e) {
+            $('select').removeAll('#traininglist', '#uebungenlist');
+            e.preventDefault();
+        });
+      </script><br></br>
+      <hr>
+
+      <div class="grid_12">
+        <p align="right">Kontakt | Impressum </p>
+      </div>
+
+    </div>
+    <!-- end .container_12 -->
+
+  </body>
+</html>

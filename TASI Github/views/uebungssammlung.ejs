@@ -1,0 +1,223 @@
+<script>
+    function favo(p1, p2, p3) {
+      $.ajax({
+        url: "/favo",
+        method: "POST",
+        data: {
+          uebung: p2,
+          favorized: p1,
+          page: p3
+        },
+        success: function(data) {
+          window.location.reload(true);
+        }
+      })
+    }
+
+    function filter(p1) {
+        var allselected = p1;
+        var kategorie = [];
+        var subkategorie = [];
+        var niveau = [];
+        var dauer = [];
+        var xhttp = "";
+
+        for(entry of allselected){
+            if(entry.textContent == "Kraft" || entry.textContent == "Schnelligkeit" || entry.textContent == "Ausdauer" || entry.textContent == "Beweglichkeit") {
+                kategorie.push(entry.textContent);
+            }if(entry.textContent == "Schnellkraft" || entry.textContent == "Kraftausdauer" || entry.textContent == "Maximalkraft" || entry.textContent == "Reaktivkraft" || entry.textContent == "Langzeitausdauer" || entry.textContent == "Koordination" || entry.textContent == "Kurzzeitausdauer" || entry.textContent == "Mittelzeitausdauer" || entry.textContent == "Motorische Schnelligkeit" || entry.textContent == "Handlungsschnelligkeit") {
+                subkategorie.push(entry.textContent);
+            }if(entry.textContent == "Beweglichkeit (UK)") {subkategorie.push(entry.textContent);
+            }if(entry.textContent == "Kraft (UK)") {subkategorie.push(entry.textContent);
+            }if(entry.textContent == "Schnelligkeit (UK)") {subkategorie.push(entry.textContent);
+            }if(entry.textContent == "Ausdauer (UK)") {subkategorie.push(entry.textContent);
+            }if(entry.textContent == "einfach" || entry.textContent == "medium" || entry.textContent == "schwer") {
+                niveau.push(entry.textContent);
+            }if(entry.textContent == "kurz" || entry.textContent == "mittel" || entry.textContent == "lang") {
+                dauer.push(entry.textContent);
+            }
+        }
+
+        $.ajax({
+            url: "/filter",
+            method: "POST",
+            data: {
+                kategorie: kategorie,
+                subkategorie: subkategorie,
+                niveau: niveau,
+                dauer: dauer
+            },
+            dataType: "JSON",
+            success: function(data) {
+                var htmlinput = "";
+
+                for(entry of data) {
+                    htmlinput += '<div class="grid_3">' + '<iframe src="' + entry.Video + '" width="220" height="140" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>';
+                    htmlinput += '<div id="bereich2">' + '<table>' + '<tr><td><h6>' + entry.Bezeichnung + ' |</h6></td>';
+                    if(entry.favourite == false) {
+                        htmlinput += '<td><a onclick="favo(' + entry.favourite + ',' + entry.UebungsID + ', 2)"><p>&nbsp;&nbsp;Favorisieren&nbsp;&nbsp;<img src="Bilder/star-01.png" width="20" alt="Favorit"></p></a></td>';
+                    }else if (entry.favourite == true) {
+                        htmlinput += '<td><a onclick="favo(' + entry.favourite + ',' + entry.UebungsID + ', 2)"><p>&nbsp;&nbsp;Nicht mehr Favorisieren&nbsp;&nbsp;<img src="Bilder/star-01.png" width="20" alt="Favorit"></p></a></td>';
+                    }
+                    htmlinput += '</tr></table></div></div>';
+                }
+                document.getElementById("uebungssektion").innerHTML = htmlinput;
+            }
+        });
+    }
+</script>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Profil - TASI Trainingsassistent</title>
+        <link rel="stylesheet" href="css/960_12_col.css" />
+        <link rel="stylesheet" href="css/reset_rtl.css" />
+        <link rel="stylesheet" href="css/formatierung.css" />
+
+        <link href="css/jquery.multiselect.css" rel="stylesheet" />
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="js/jquery.multiselect.js"></script>
+        <script src='js/menu.js'></script>
+
+        <style>
+            .ms-options-wrap > .ms-options > ul li.selected label,
+            .ms-options-wrap > .ms-options > ul label:hover {
+            background-color: #367ec3;
+            color: #ffffff
+            }
+        </style>
+
+    </head>
+
+
+    <body>
+        <div class="container_12">
+
+
+
+
+            <!--Menü-->
+            <div class="grid_12">
+                    <a href="/profil.html"><img src="/Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
+                    <div class="nav">
+                  
+                    <ul class='menu'>
+                    <li><a  href="/start">Profil</a></li>
+                    <li><a  href="/uebungssammlung">Übungen</a></li>
+                    <li><a  href="/training">Training</a></li>
+                    <% if (roleid == 1) { %>
+                      <li><a href="trainer.html">Trainerbereich</a>
+                          <ul class='submenu'>
+                              <li><a href="/createtrainingplan">Plan erstellen</a></li>
+                              <li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
+                          </ul>
+                      </li>
+                    <% } %>
+                    <% if(roleid == 2) { %>
+                      <li><a href="trainerbereich.html">Spielerbereich</a></li>
+                    <% } %>
+                    <li><a href="/logout">Ausloggen</a></li>
+                  </ul></div>
+                  </div>
+            <!-- Menü Ende -->
+
+            <div class="grid_12">
+                <h1>Übungen</h1>
+            </div>
+            <hr>
+
+            <div class="grid_12">
+                <h4>Filtern nach Übungen</h4>
+            </div>
+
+
+            <div class="grid_9">
+            <select name="basic[]" multiple="multiple" >
+
+                                  <!--<option value="">Favoriten</option>-->
+
+
+              <optgroup label="Kategorie">
+                                  <option value="Kraft">Kraft</option>
+                                  <option value="Ausdauer">Ausdauer</option>
+                                  <option value="Schnelligkeit">Schnelligkeit</option>
+                                  <option value="Beweglichtkeit">Beweglichkeit</option>
+                              </optgroup>
+            <optgroup label="Unterkategorie">
+                                <option value="5">Schnellkraft</option>
+                                <option value="6">Kraftausdauer</option>
+                                <option value="7">Maximalkraft</option>
+                                <option value="8">Reaktivkraft</option>
+                                <option value="9">Beweglichkeit</option>
+                                <option value="10">Koordination</option>
+                                <option value="11">Kraft</option>
+                                <option value="12">Langzeitdauer</option>
+                                <option value="13">Kurzzeitdauer</option>
+                                <option value="14">Mittelzeitdauer</option>
+                            </optgroup>
+            <optgroup label="Niveau">
+                              <option value="15">niedrig</option>
+                              <option value="16">mittel</option>
+                              <option value="17">hoch</option>
+                          </optgroup>
+                          <optgroup label="Dauer">
+                                              <option value="18">kurz</option>
+                                              <option value="19">mittel</option>
+                                              <option value="20">lang</option>
+                                          </optgroup>
+            </select>
+            <script>
+            $('select[multiple]').multiselect({
+                columns  : 2,
+                search   : true,
+                selectAll: true,
+                texts    : {
+                    placeholder: 'Filtern nach...',
+                }
+            });
+            </script>
+          </div>
+
+
+
+            <div class="grid_3">
+              <div class="form-group">
+                  <input type="submit" class="btn btn-primary" value="Suchen" onclick="filter(document.getElementsByClassName('selected'))">
+              </div></div>
+
+              <div class="grid_12">
+              <br><h4>Übungen</h4>
+              </div>
+              <div class="clear"></div>
+            <div id="uebungssektion">
+                <% for(entry of uebungen){ %>
+
+                    <div class="grid_3">
+                        <iframe src="<%= entry.Video %>" width="220" height="140" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+                        <div id="bereich2">
+                            <a href="/uebungssammlung/uebung/<%= entry.UebungsID %>"><h6 class="uebungen"> <%= entry.Bezeichnung %> </h6></a>
+                            <% if(entry.favourite == false) { %>
+                                <a onclick="favo(<%= entry.favourite %>, <%= entry.UebungsID %>, 2)"><p>&nbsp;&nbsp;Favorisieren&nbsp;&nbsp;<img src="/bilder/star-01.png" width="20" alt="Favorit"></p></a>
+                            <% } else if(entry.favourite == true) { %>
+                                <a onclick="favo(<%= entry.favourite %>, <%= entry.UebungsID %>, 2)"><p>&nbsp;&nbsp;Nicht mehr Favorisieren&nbsp;&nbsp;<img src="/bilder/star-02.png" width="20" alt="Favorit"></p></a>
+                            <% } %>
+                        </div>
+                    </div>
+
+                <% } %>
+            </div>
+            </br>
+<br>
+            </hr>
+
+            <div class="grid_12">
+                <p align="right">Kontakt | Impressum </p>
+            </div>
+
+        </div>
+        <!-- end .container_12 -->
+
+    </body>
+</html>

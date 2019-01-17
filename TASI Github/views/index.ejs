@@ -1,0 +1,52 @@
+
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>TASI Trainingsassistent</title>
+<link rel="stylesheet" href="css/960_12_col_rtl.css" />
+<link rel="stylesheet" href="css/reset_rtl.css" />
+<link rel="stylesheet" href="css/formatierung.css" />
+</head>
+
+
+<body>
+
+<div class="container_12">
+
+  <div class="grid_4 push_4" style="position: center; margin-top:8em; ">
+
+    <center>  <img src="Bilder/logo_large.png" width="100%" alt="TASILoo" /></center>
+    <br><br>
+    <p>Gib deine Daten an</p>
+
+    <form class="login" method="POST" action="/logged">
+
+        <div class="form-group">
+            <label for="username">Username:<sup>*</sup></label>
+            <input type="text" name="username"class="form-control" value="Username">
+            <span class="help-block"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Passwort:<sup>*</sup></label>
+            <input type="password" name="password" class="form-control" value="Passwort">
+            <span class="help-block"></span>
+        </div>
+
+      <center>
+        <a href="/passwortvergessen">Passwort vergessen?</a>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Anmelden">
+        </div></center>
+
+    </form>
+
+    <br>
+    <p style="color: red"><%= meldung %></p>
+
+</div>
+<!-- end .container_12 -->
+
+</body>
+</html>
