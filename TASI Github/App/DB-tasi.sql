@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 17. Dez 2018 um 14:31
+-- Erstellungszeit: 17. Jan 2019 um 11:02
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.11
 
@@ -19,8 +19,194 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `tasidaten`
+-- Datenbank: `tasi`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `attributzuweisung`
+--
+
+CREATE TABLE `attributzuweisung` (
+  `UebungsID` int(11) NOT NULL,
+  `UebungsattributID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `attributzuweisung`
+--
+
+INSERT INTO `attributzuweisung` (`UebungsID`, `UebungsattributID`) VALUES
+(100, 3),
+(200, 1),
+(200, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `hilfsmittel`
+--
+
+CREATE TABLE `hilfsmittel` (
+  `HilfsmittelID` int(11) NOT NULL,
+  `Bezeichnung` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `hilfsmittel`
+--
+
+INSERT INTO `hilfsmittel` (`HilfsmittelID`, `Bezeichnung`) VALUES
+(1, 'Fliese'),
+(2, 'Handball'),
+(3, 'Medizinball'),
+(4, 'Zuspieler'),
+(5, 'Stoppuhr'),
+(6, 'Langhantel'),
+(7, 'Reckstange'),
+(8, 'Kasten'),
+(9, 'Kleinkasten'),
+(10, 'Kastendeckel'),
+(11, 'Langbank'),
+(12, 'Matte'),
+(13, 'Zauberschnur'),
+(14, 'Deuserband'),
+(15, 'Theraband'),
+(16, 'Koordinationsleiter');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `hilfsmittelzuweisung`
+--
+
+CREATE TABLE `hilfsmittelzuweisung` (
+  `HilfsmittelID` int(11) NOT NULL,
+  `uebungsID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `hilfsmittelzuweisung`
+--
+
+INSERT INTO `hilfsmittelzuweisung` (`HilfsmittelID`, `uebungsID`) VALUES
+(3, 1),
+(2, 2),
+(4, 2),
+(5, 3),
+(6, 5),
+(11, 5),
+(6, 6),
+(11, 7),
+(6, 7),
+(6, 8),
+(9, 9),
+(9, 10);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `mannschaften`
+--
+
+CREATE TABLE `mannschaften` (
+  `MannschaftsID` int(11) NOT NULL,
+  `Bezeichnung` varchar(30) NOT NULL,
+  `SpielerID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `mannschaften`
+--
+
+INSERT INTO `mannschaften` (`MannschaftsID`, `Bezeichnung`, `SpielerID`) VALUES
+(1, 'Männer 1', 1),
+(2, 'Damen 1', 1),
+(3, 'm Jugend B', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `mannschaftszuweisung`
+--
+
+CREATE TABLE `mannschaftszuweisung` (
+  `MannschaftsID` int(11) NOT NULL,
+  `SpielerID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `mannschaftszuweisung`
+--
+
+INSERT INTO `mannschaftszuweisung` (`MannschaftsID`, `SpielerID`) VALUES
+(2, 2),
+(2, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `rolle`
+--
+
+CREATE TABLE `rolle` (
+  `RollenID` int(11) NOT NULL,
+  `Bezeichnung` char(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `rolle`
+--
+
+INSERT INTO `rolle` (`RollenID`, `Bezeichnung`) VALUES
+(1, 'Trainer'),
+(2, 'Spieler');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `training`
+--
+
+CREATE TABLE `training` (
+  `TrainingsID` int(11) NOT NULL,
+  `Bezeichnung` varchar(30) NOT NULL,
+  `Zeitraum` datetime NOT NULL,
+  `TrainerID` int(11) NOT NULL,
+  `beschreibung` text,
+  `MannschaftsID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `training`
+--
+
+INSERT INTO `training` (`TrainingsID`, `Bezeichnung`, `Zeitraum`, `TrainerID`, `beschreibung`, `MannschaftsID`) VALUES
+(1, 'Allgemein Damen 1', '2018-01-17 05:23:00', 1, 'Dieses Training ist gut für die Oberschenkelmuskulatur und unterstützt auch den Torwart beim Nachtreten bei zu guten Gegnern', NULL),
+(2, 'Allgemein Herren 2', '2018-01-19 00:00:00', 1, 'Training der Allgemeinen Rumpfmuskulatur. Damit unser Spielmacher endlich seine Wampe verliert.', NULL),
+(17, 'testen', '0000-00-00 00:00:00', 1, 'adsfafgasdfasdf', 1),
+(18, '', '0000-00-00 00:00:00', 0, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `trainingszuweisung`
+--
+
+CREATE TABLE `trainingszuweisung` (
+  `TrainingsID` int(11) NOT NULL,
+  `SpielerID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `trainingszuweisung`
+--
+
+INSERT INTO `trainingszuweisung` (`TrainingsID`, `SpielerID`) VALUES
+(1, 2),
+(2, 3),
+(18, 3);
 
 -- --------------------------------------------------------
 
@@ -30,7 +216,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `uebungen` (
   `UebungsID` int(11) NOT NULL,
-  `Bezeichnung` varchar(30) NOT NULL,
+  `Bezeichnung` varchar(40) NOT NULL,
   `Beschreibung` text NOT NULL,
   `Video` text NOT NULL,
   `Bild` varchar(40) NOT NULL,
@@ -48,7 +234,7 @@ CREATE TABLE `uebungen` (
 INSERT INTO `uebungen` (`UebungsID`, `Bezeichnung`, `Beschreibung`, `Video`, `Bild`, `Kategorie`, `Unterkategorie`, `Dauer`, `Niveau`, `Referenz`) VALUES
 (100, 'Medizinball Wand 1 beidbeinig', 'Beidbeinig ca 2 - 5 Meter vor der Wand stehen. Medizinball über Kopf mit maximalem Krafteinsatz gegen die Wand werfen.\r\nVariante A: Linkes bzw. rechtes Bein nach vorne positionieren.\r\nVariante B: Beinwechsel nach jedem Wurf.', 'https://player.vimeo.com/video/177053507\r\n', '', 'Kraft', 'Wurfkraft', 'kurz', 'einfach', ''),
 (101, 'Medizinball Wand 2 einbeinig', 'Ca 2 - 5 Meter vor der Wand stehen. Medizinball über Kopf mit maximalem Krafteinsatz gegen die Wand werfen.\r\nLinkes bzw. rechtes Bein nach vorne positionieren.\r\n', 'https://player.vimeo.com/video/177053507', '', 'Kraft', 'Wurfkraft', 'kurz', 'einfach', ''),
-(102, 'Medizinball Wand 3 Bein wechse', 'Ca 2 - 5 Meter vor der Wand stehen. Medizinball über Kopf mit maximalem Krafteinsatz gegen die Wand \r\nLinkes bzw. rechtes Bein nach vorne positionieren.\r\nBeinwechsel nach jedem Wurf.', 'https://player.vimeo.com/video/177053507', '', 'Kraft', 'Wurfkraft', 'kurz', 'einfach', ''),
+(102, 'Medizinball Wand 3 Bein wechsel', 'Ca 2 - 5 Meter vor der Wand stehen. Medizinball über Kopf mit maximalem Krafteinsatz gegen die Wand \r\nLinkes bzw. rechtes Bein nach vorne positionieren.\r\nBeinwechsel nach jedem Wurf.', 'https://player.vimeo.com/video/177053507', '', 'Kraft', 'Wurfkraft', 'kurz', 'einfach', ''),
 (200, 'Liegestuetz 1', 'Positionierung ueber dem Kasten. Haende auf dem Kleinkasten. Untere Kante auf Hoehe Brustbein. Kontrolliert nach unten in den Liegestuetz gehen und nach oben abdruecken.\r\nVariante: Liegestuetz Ruecklinks.', 'https://player.vimeo.com/video/177041041', '', 'Kraft', 'Armmuskulatur', 'kurz', 'einfach', ''),
 (201, 'Liegestuetz 2 Rücklings', 'Liegestuetz Ruecklings:\r\nPositionierung ueber dem Kasten. Haende auf dem Kleinkasten. Untere Kante auf Hoehe Brustbein. Kontrolliert nach unten in den Liegestuetz gehen und nach oben abdruecken. ', 'https://player.vimeo.com/video/177041041', '', 'Kraft', 'Armmuskulatur', 'kurz', 'einfach', ''),
 (300, 'Hocksprünge Push', 'Hocksprünge mit Armeinsatz, Arme beim Sprung von vorne nach hinten ziehen; Knie und Fußspitzen zeigen minimal nach außen', 'https://player.vimeo.com/video/177274958', '', 'Kraft', 'Sprungkraft', 'kurz', 'einfach', ''),
@@ -78,9 +264,197 @@ INSERT INTO `uebungen` (`UebungsID`, `Bezeichnung`, `Beschreibung`, `Video`, `Bi
 (1900, 'Kurzzeitintervall Stadion', '100m schnell rennen, 100m langsam rennen, das Ganze 4-10x wiederholen', 'https://player.vimeo.com/video/177429464', '', 'Ausdauer', 'Kurzzeit', 'lang', 'einfach', ''),
 (2000, 'Mittelzeitwiederholung', '800m schnell rennen, das Ganze 6-8x wiederholen', 'https://player.vimeo.com/video/177465747', '', 'Ausdauer', 'Mittelzeit', 'lang', 'hoch', '');
 
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `uebungsattribute`
+--
+
+CREATE TABLE `uebungsattribute` (
+  `UebungsattributID` int(11) NOT NULL,
+  `Bezeichnung` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `uebungsattribute`
+--
+
+INSERT INTO `uebungsattribute` (`UebungsattributID`, `Bezeichnung`) VALUES
+(1, 'Wiederholungen'),
+(3, 'Dauer'),
+(4, 'Strecke');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `uebungsfavorisierung`
+--
+
+CREATE TABLE `uebungsfavorisierung` (
+  `TrainerID` int(11) NOT NULL,
+  `UebungsID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `uebungsfavorisierung`
+--
+
+INSERT INTO `uebungsfavorisierung` (`TrainerID`, `UebungsID`) VALUES
+(1, 3),
+(1, 9),
+(1, 10),
+(1, 1),
+(1, 5),
+(1, 2),
+(1, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `uebungszuweisung`
+--
+
+CREATE TABLE `uebungszuweisung` (
+  `UebungsID` int(11) NOT NULL,
+  `TrainingsID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `uebungszuweisung`
+--
+
+INSERT INTO `uebungszuweisung` (`UebungsID`, `TrainingsID`) VALUES
+(100, 1),
+(200, 1),
+(300, 1),
+(102, 17),
+(400, 17),
+(500, 2),
+(1501, 2),
+(800, 2),
+(200, 17),
+(1400, 18),
+(400, 18);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `user`
+--
+
+CREATE TABLE `user` (
+  `NutzerID` int(11) NOT NULL,
+  `vorname` varchar(30) DEFAULT NULL,
+  `nachname` varchar(30) DEFAULT NULL,
+  `email` varchar(60) DEFAULT NULL,
+  `username` varchar(30) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `RollenID` int(11) DEFAULT NULL,
+  `adresse` varchar(50) DEFAULT NULL,
+  `stadt` varchar(50) DEFAULT NULL,
+  `tel` text,
+  `mobil` text,
+  `bild` text NOT NULL,
+  `position` varchar(50) DEFAULT NULL,
+  `geburtsdatum` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `user`
+--
+
+INSERT INTO `user` (`NutzerID`, `vorname`, `nachname`, `email`, `username`, `password`, `RollenID`, `adresse`, `stadt`, `tel`, `mobil`, `bild`, `position`, `geburtsdatum`) VALUES
+(1, 'Oliver', 'Schroeferl', 'olli@schr.com', 'oliver', 'mauldascha', 1, 'Kirchplatz 2', 'Weingarten', '075143023', '0172555555', 'profilbilder/faultier.jpg', 'RL, RR', '01.02.1992'),
+(2, 'Ann-Kathrin', 'Domhan', 'a.k.domhan@gmail.com', 'anni', 'katzen', 2, 'Doggenriedstraße 5', 'Weingarten', '07514674', '0152556677', '', 'TW', '15.06.1234'),
+(3, 'Corinna', 'Blersch', 'keineahnung@live.com', 'Cori', 'blondi', 2, 'Bergstr 21', 'Baienfurt', '07510000', '0172345678', 'profilbilder/profilbild_spieler01.jpg', 'LA', '11.11.1911'),
+(4, 'Michael', 'Ohnename', 'm.o@web.de', 'michi', 'michi', 2, 'Hungerstr. 17', 'Baindt', '07516564316', '0172656945', 'profilbilder/bild_mo.jpg', 'RA', '23.01.1990'),
+(5, 'Stephan', 'Burkowski', 'burksteph@googlemail.com', 'sb1234', 'kardoffelsalad', 1, NULL, NULL, NULL, NULL, '', 'K', NULL),
+(6, 'Gesa', 'Langhammer', 'asdfasdf@asdf.de', 'gesi', 'abcd', 2, 'Straßenstr. 3', 'Stadt', NULL, NULL, '', 'K', '31.34.1990');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `workout`
+--
+
+CREATE TABLE `workout` (
+  `WorkoutID` int(11) NOT NULL,
+  `NutzerID` int(11) NOT NULL,
+  `Datum` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `workout`
+--
+
+INSERT INTO `workout` (`WorkoutID`, `NutzerID`, `Datum`) VALUES
+(1, 1, '2019-01-12 12:01:32'),
+(2, 1, '2019-01-12 12:11:37');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `workoutachievements`
+--
+
+CREATE TABLE `workoutachievements` (
+  `WorkoutID` int(11) NOT NULL,
+  `UebungsID` int(11) NOT NULL,
+  `UebungsattributID` int(11) NOT NULL,
+  `Wert` float NOT NULL,
+  `NutzerID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 --
 -- Indizes der exportierten Tabellen
 --
+
+--
+-- Indizes für die Tabelle `hilfsmittel`
+--
+ALTER TABLE `hilfsmittel`
+  ADD PRIMARY KEY (`HilfsmittelID`);
+
+--
+-- Indizes für die Tabelle `hilfsmittelzuweisung`
+--
+ALTER TABLE `hilfsmittelzuweisung`
+  ADD KEY `HilfsmittelID` (`HilfsmittelID`),
+  ADD KEY `uebungsID` (`uebungsID`);
+
+--
+-- Indizes für die Tabelle `mannschaften`
+--
+ALTER TABLE `mannschaften`
+  ADD PRIMARY KEY (`MannschaftsID`),
+  ADD KEY `SpielerID` (`SpielerID`);
+
+--
+-- Indizes für die Tabelle `mannschaftszuweisung`
+--
+ALTER TABLE `mannschaftszuweisung`
+  ADD KEY `MannschaftsID` (`MannschaftsID`),
+  ADD KEY `SpielerID` (`SpielerID`);
+
+--
+-- Indizes für die Tabelle `rolle`
+--
+ALTER TABLE `rolle`
+  ADD PRIMARY KEY (`RollenID`);
+
+--
+-- Indizes für die Tabelle `training`
+--
+ALTER TABLE `training`
+  ADD PRIMARY KEY (`TrainingsID`),
+  ADD KEY `TrainerID` (`TrainerID`);
+
+--
+-- Indizes für die Tabelle `trainingszuweisung`
+--
+ALTER TABLE `trainingszuweisung`
+  ADD KEY `TrainingsID` (`TrainingsID`),
+  ADD KEY `SpielerID` (`SpielerID`);
 
 --
 -- Indizes für die Tabelle `uebungen`
@@ -89,14 +463,81 @@ ALTER TABLE `uebungen`
   ADD PRIMARY KEY (`UebungsID`);
 
 --
+-- Indizes für die Tabelle `uebungsattribute`
+--
+ALTER TABLE `uebungsattribute`
+  ADD PRIMARY KEY (`UebungsattributID`);
+
+--
+-- Indizes für die Tabelle `uebungszuweisung`
+--
+ALTER TABLE `uebungszuweisung`
+  ADD KEY `UebungsID` (`UebungsID`),
+  ADD KEY `TrainingsID` (`TrainingsID`);
+
+--
+-- Indizes für die Tabelle `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`NutzerID`);
+
+--
+-- Indizes für die Tabelle `workout`
+--
+ALTER TABLE `workout`
+  ADD PRIMARY KEY (`WorkoutID`);
+
+--
 -- AUTO_INCREMENT für exportierte Tabellen
 --
+
+--
+-- AUTO_INCREMENT für Tabelle `hilfsmittel`
+--
+ALTER TABLE `hilfsmittel`
+  MODIFY `HilfsmittelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT für Tabelle `mannschaften`
+--
+ALTER TABLE `mannschaften`
+  MODIFY `MannschaftsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT für Tabelle `rolle`
+--
+ALTER TABLE `rolle`
+  MODIFY `RollenID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT für Tabelle `training`
+--
+ALTER TABLE `training`
+  MODIFY `TrainingsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT für Tabelle `uebungen`
 --
 ALTER TABLE `uebungen`
   MODIFY `UebungsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2001;
+
+--
+-- AUTO_INCREMENT für Tabelle `uebungsattribute`
+--
+ALTER TABLE `uebungsattribute`
+  MODIFY `UebungsattributID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT für Tabelle `user`
+--
+ALTER TABLE `user`
+  MODIFY `NutzerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT für Tabelle `workout`
+--
+ALTER TABLE `workout`
+  MODIFY `WorkoutID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
