@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 17. Jan 2019 um 11:02
+-- Erstellungszeit: 18. Jan 2019 um 21:17
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.11
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `tasi`
+-- Datenbank: `db-tasi`
 --
 
 -- --------------------------------------------------------
@@ -73,7 +73,8 @@ INSERT INTO `hilfsmittel` (`HilfsmittelID`, `Bezeichnung`) VALUES
 (13, 'Zauberschnur'),
 (14, 'Deuserband'),
 (15, 'Theraband'),
-(16, 'Koordinationsleiter');
+(16, 'Koordinationsleiter'),
+(17, 'Pylonen');
 
 -- --------------------------------------------------------
 
@@ -91,18 +92,27 @@ CREATE TABLE `hilfsmittelzuweisung` (
 --
 
 INSERT INTO `hilfsmittelzuweisung` (`HilfsmittelID`, `uebungsID`) VALUES
-(3, 1),
-(2, 2),
-(4, 2),
-(5, 3),
-(6, 5),
-(11, 5),
-(6, 6),
-(11, 7),
-(6, 7),
-(6, 8),
-(9, 9),
-(9, 10);
+(3, 100),
+(3, 101),
+(3, 102),
+(9, 200),
+(9, 201),
+(12, 500),
+(12, 501),
+(12, 502),
+(16, 1100),
+(16, 1101),
+(16, 1200),
+(16, 1300),
+(16, 1301),
+(16, 1400),
+(16, 1401),
+(17, 1401),
+(16, 1500),
+(16, 1501),
+(16, 1502),
+(16, 1503),
+(7, 1503);
 
 -- --------------------------------------------------------
 
@@ -495,7 +505,7 @@ ALTER TABLE `workout`
 -- AUTO_INCREMENT für Tabelle `hilfsmittel`
 --
 ALTER TABLE `hilfsmittel`
-  MODIFY `HilfsmittelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `HilfsmittelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT für Tabelle `mannschaften`
