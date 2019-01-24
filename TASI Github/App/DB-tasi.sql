@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 24. Jan 2019 um 11:57
+-- Erstellungszeit: 24. Jan 2019 um 22:23
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.11
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `tasi`
+-- Datenbank: `db-tasi`
 --
 
 -- --------------------------------------------------------
@@ -78,9 +78,37 @@ CREATE TABLE `attributzuweisung` (
 --
 
 INSERT INTO `attributzuweisung` (`UebungsID`, `UebungsattributID`) VALUES
-(100, 3),
 (200, 1),
-(200, 4);
+(100, 1),
+(101, 1),
+(102, 1),
+(201, 1),
+(300, 1),
+(400, 1),
+(500, 1),
+(501, 1),
+(502, 1),
+(600, 2),
+(700, 2),
+(800, 2),
+(900, 2),
+(1000, 2),
+(1100, 3),
+(1101, 3),
+(1200, 3),
+(1300, 3),
+(1301, 3),
+(1400, 3),
+(1401, 3),
+(1500, 3),
+(1501, 3),
+(1502, 3),
+(1503, 3),
+(1600, 4),
+(1700, 5),
+(1800, 5),
+(1900, 5),
+(2000, 5);
 
 -- --------------------------------------------------------
 
@@ -113,7 +141,8 @@ INSERT INTO `hilfsmittel` (`HilfsmittelID`, `Bezeichnung`) VALUES
 (13, 'Zauberschnur'),
 (14, 'Deuserband'),
 (15, 'Theraband'),
-(16, 'Koordinationsleiter');
+(16, 'Koordinationsleiter'),
+(17, 'Pylonen');
 
 -- --------------------------------------------------------
 
@@ -131,18 +160,27 @@ CREATE TABLE `hilfsmittelzuweisung` (
 --
 
 INSERT INTO `hilfsmittelzuweisung` (`HilfsmittelID`, `uebungsID`) VALUES
-(3, 1),
-(2, 2),
-(4, 2),
-(5, 3),
-(6, 5),
-(11, 5),
-(6, 6),
-(11, 7),
-(6, 7),
-(6, 8),
-(9, 9),
-(9, 10);
+(3, 100),
+(3, 101),
+(3, 102),
+(9, 200),
+(9, 201),
+(12, 500),
+(12, 501),
+(12, 502),
+(16, 1100),
+(16, 1101),
+(16, 1200),
+(16, 1300),
+(16, 1301),
+(16, 1400),
+(16, 1401),
+(17, 1401),
+(16, 1500),
+(16, 1501),
+(16, 1502),
+(16, 1503),
+(7, 1503);
 
 -- --------------------------------------------------------
 
@@ -321,8 +359,10 @@ CREATE TABLE `uebungsattribute` (
 
 INSERT INTO `uebungsattribute` (`UebungsattributID`, `Bezeichnung`) VALUES
 (1, 'Wiederholungen'),
-(3, 'Dauer'),
-(4, 'Strecke');
+(2, 'Einschätzung'),
+(3, 'Dauer in sec.'),
+(4, 'Strecke in Meter'),
+(5, 'Dauer in min.');
 
 -- --------------------------------------------------------
 
@@ -507,43 +547,7 @@ ALTER TABLE `achievements`
 -- AUTO_INCREMENT für Tabelle `hilfsmittel`
 --
 ALTER TABLE `hilfsmittel`
-  MODIFY `HilfsmittelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- AUTO_INCREMENT für Tabelle `mannschaften`
---
-ALTER TABLE `mannschaften`
-  MODIFY `MannschaftsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT für Tabelle `rolle`
---
-ALTER TABLE `rolle`
-  MODIFY `RollenID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT für Tabelle `training`
---
-ALTER TABLE `training`
-  MODIFY `TrainingsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
---
--- AUTO_INCREMENT für Tabelle `uebungen`
---
-ALTER TABLE `uebungen`
-  MODIFY `UebungsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2001;
-
---
--- AUTO_INCREMENT für Tabelle `uebungsattribute`
---
-ALTER TABLE `uebungsattribute`
-  MODIFY `UebungsattributID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT für Tabelle `user`
---
-ALTER TABLE `user`
-  MODIFY `NutzerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `HilfsmittelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
