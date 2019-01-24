@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 18. Jan 2019 um 21:17
+-- Erstellungszeit: 24. Jan 2019 um 11:57
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.11
 
@@ -19,8 +19,48 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `db-tasi`
+-- Datenbank: `tasi`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `achievements`
+--
+
+CREATE TABLE `achievements` (
+  `AchievementID` int(11) NOT NULL,
+  `UebungsID` int(11) NOT NULL,
+  `UebungsattributID` int(11) NOT NULL,
+  `NutzerID` int(11) NOT NULL,
+  `Datum` datetime NOT NULL,
+  `Wert` varchar(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `achievements`
+--
+
+INSERT INTO `achievements` (`AchievementID`, `UebungsID`, `UebungsattributID`, `NutzerID`, `Datum`, `Wert`) VALUES
+(1, 200, 1, 1, '2019-01-21 20:36:11', '119'),
+(2, 200, 4, 1, '2019-01-21 20:36:11', '89'),
+(3, 100, 3, 1, '2019-01-21 20:36:18', '132'),
+(4, 200, 1, 1, '2019-01-22 15:21:40', '55'),
+(5, 200, 4, 1, '2019-01-22 15:21:40', '6'),
+(6, 100, 3, 1, '2019-01-22 15:21:47', '80'),
+(7, 100, 3, 1, '2019-01-22 15:21:53', '4'),
+(8, 200, 1, 1, '2019-01-23 17:16:31', '15'),
+(9, 200, 4, 1, '2019-01-23 17:16:31', '4'),
+(10, 200, 1, 1, '2019-01-23 17:16:41', '19'),
+(11, 200, 4, 1, '2019-01-23 17:16:41', '6'),
+(12, 200, 1, 1, '2019-01-23 17:16:49', '50'),
+(13, 200, 4, 1, '2019-01-23 17:16:49', '8'),
+(14, 200, 1, 1, '2019-01-24 01:25:02', '77'),
+(15, 200, 4, 1, '2019-01-24 01:25:02', '6'),
+(16, 200, 1, 1, '2019-01-24 01:25:11', '42'),
+(17, 200, 4, 1, '2019-01-24 01:25:11', '8'),
+(18, 200, 1, 1, '2019-01-24 01:25:20', '63'),
+(19, 200, 4, 1, '2019-01-24 01:25:20', '12');
 
 -- --------------------------------------------------------
 
@@ -73,8 +113,7 @@ INSERT INTO `hilfsmittel` (`HilfsmittelID`, `Bezeichnung`) VALUES
 (13, 'Zauberschnur'),
 (14, 'Deuserband'),
 (15, 'Theraband'),
-(16, 'Koordinationsleiter'),
-(17, 'Pylonen');
+(16, 'Koordinationsleiter');
 
 -- --------------------------------------------------------
 
@@ -92,27 +131,18 @@ CREATE TABLE `hilfsmittelzuweisung` (
 --
 
 INSERT INTO `hilfsmittelzuweisung` (`HilfsmittelID`, `uebungsID`) VALUES
-(3, 100),
-(3, 101),
-(3, 102),
-(9, 200),
-(9, 201),
-(12, 500),
-(12, 501),
-(12, 502),
-(16, 1100),
-(16, 1101),
-(16, 1200),
-(16, 1300),
-(16, 1301),
-(16, 1400),
-(16, 1401),
-(17, 1401),
-(16, 1500),
-(16, 1501),
-(16, 1502),
-(16, 1503),
-(7, 1503);
+(3, 1),
+(2, 2),
+(4, 2),
+(5, 3),
+(6, 5),
+(11, 5),
+(6, 6),
+(11, 7),
+(6, 7),
+(6, 8),
+(9, 9),
+(9, 10);
 
 -- --------------------------------------------------------
 
@@ -381,43 +411,15 @@ INSERT INTO `user` (`NutzerID`, `vorname`, `nachname`, `email`, `username`, `pas
 (5, 'Stephan', 'Burkowski', 'burksteph@googlemail.com', 'sb1234', 'kardoffelsalad', 1, NULL, NULL, NULL, NULL, '', 'K', NULL),
 (6, 'Gesa', 'Langhammer', 'asdfasdf@asdf.de', 'gesi', 'abcd', 2, 'Straßenstr. 3', 'Stadt', NULL, NULL, '', 'K', '31.34.1990');
 
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `workout`
---
-
-CREATE TABLE `workout` (
-  `WorkoutID` int(11) NOT NULL,
-  `NutzerID` int(11) NOT NULL,
-  `Datum` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Daten für Tabelle `workout`
---
-
-INSERT INTO `workout` (`WorkoutID`, `NutzerID`, `Datum`) VALUES
-(1, 1, '2019-01-12 12:01:32'),
-(2, 1, '2019-01-12 12:11:37');
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `workoutachievements`
---
-
-CREATE TABLE `workoutachievements` (
-  `WorkoutID` int(11) NOT NULL,
-  `UebungsID` int(11) NOT NULL,
-  `UebungsattributID` int(11) NOT NULL,
-  `Wert` float NOT NULL,
-  `NutzerID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 --
 -- Indizes der exportierten Tabellen
 --
+
+--
+-- Indizes für die Tabelle `achievements`
+--
+ALTER TABLE `achievements`
+  ADD PRIMARY KEY (`AchievementID`);
 
 --
 -- Indizes für die Tabelle `hilfsmittel`
@@ -492,20 +494,20 @@ ALTER TABLE `user`
   ADD PRIMARY KEY (`NutzerID`);
 
 --
--- Indizes für die Tabelle `workout`
---
-ALTER TABLE `workout`
-  ADD PRIMARY KEY (`WorkoutID`);
-
---
 -- AUTO_INCREMENT für exportierte Tabellen
 --
+
+--
+-- AUTO_INCREMENT für Tabelle `achievements`
+--
+ALTER TABLE `achievements`
+  MODIFY `AchievementID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT für Tabelle `hilfsmittel`
 --
 ALTER TABLE `hilfsmittel`
-  MODIFY `HilfsmittelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `HilfsmittelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT für Tabelle `mannschaften`
@@ -542,12 +544,6 @@ ALTER TABLE `uebungsattribute`
 --
 ALTER TABLE `user`
   MODIFY `NutzerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT für Tabelle `workout`
---
-ALTER TABLE `workout`
-  MODIFY `WorkoutID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
