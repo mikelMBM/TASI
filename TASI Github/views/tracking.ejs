@@ -41,67 +41,69 @@
 
 
   <body>
+<!--START Wrapper-->
     <div class="container_12">
 
+<!--START Menu-->
+			<div class="grid_12">
+				<a href="/profil.html"><img src="/Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
+				<div class="nav">
+					<ul class='menu'>
+						<li><a  href="/start">Profil</a></li>
+						<li><a  href="/uebungssammlung">√úbungen</a></li>
+						<li><a  href="/training">Training</a></li>
+						
+						<!--START Trainermenu-->
+						<% if (roleid == 1) { %>
+							<li><a href="trainer.html">Trainerbereich</a>
+								<ul class='submenu'>
+									<li><a href="/createtrainingplan">Plan erstellen</a></li>
+									<li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
+								</ul>
+							</li>
+						<% } %>
+						<!--END Trainermenu-->
+						
+						<!--START Spielermenu-->
+						<% if(roleid == 2) { %>
+							<li><a href="trainerbereich.html">Spielerbereich</a></li>
+						<% } %>
+						<!--END Spielermenu-->
+						
+						<li><a href="/logout">Ausloggen</a></li>
+					</ul>
+				</div>
+			</div>
+<!--END Menu-->        
 
 
-
-      <!--Men√º-->
-      <div class="grid_12">
-          <a href="/profil.html"><img src="/Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
-          <div class="nav">
-        
-          <ul class='menu'>
-          <li><a  href="/start">Profil</a></li>
-          <li><a  href="/uebungssammlung">√úbungen</a></li>
-          <li><a  href="/training">Training</a></li>
-          <% if (roleid == 1) { %>
-            <li><a href="trainer.html">Trainerbereich</a>
-                <ul class='submenu'>
-                    <li><a href="/createtrainingplan">Plan erstellen</a></li>
-                    <li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
-                </ul>
-            </li>
-          <% } %>
-          <% if(roleid == 2) { %>
-            <li><a href="trainerbereich.html">Spielerbereich</a></li>
-          <% } %>
-          <li><a href="/logout">Ausloggen</a></li>
-        </ul></div>
-        </div>
-
-      <div class="grid_12" id="trainingsbezeichnung">
-        <h1>Trainingspl√§ne</h1>
-      </div>
+<!--START Headline-->
+		  <div class="grid_12" id="trainingsbezeichnung">
+			<h1>Trainingspl√§ne</h1>
+		  </div>
+      
+<!--END Headline-->
       <hr>
-
-      <div class="grid_12">
-      		<form action="/tracking" method="post">
+      
+<!--START Dropdown ‹bungsauswahl-->
+		<div class="grid_12">
+			<form action="/tracking" method="post">
 				<select id="plans" class="auswahl" name="trainingsID" style="width: 365px" onchange="this.form.submit()" >
-						  <option disabled selected>Trainingsplan ausw√§hlen</option>
-						  <optgroup label="Bestehende Pl√§ne">
-							<% for(entry of allplans) { %>
-							  <option value='<%= entry.TrainingsID %>'><%=entry.Bezeichnung %></option>
-							<% } %>
-						  </optgroup>
+					<option disabled selected>Trainingsplan ausw√§hlen</option>
+					<optgroup label="Bestehende Pl√§ne">
+						<% for(entry of allplans) { %>
+						  <option value='<%= entry.TrainingsID %>'><%=entry.Bezeichnung %></option>
+						<% } %>
+					</optgroup>
 				</select>
 			</form>
-      </div><br></br>      
+		</div><br></br>  
+<!--END Dropdown ‹bungsauswahl-->  
 
-     <div id="einzelneuebung">
-        <div class="grid_6" id="uebungsbezeichnung">
-        	<% if(uebung.length > 0){ %>
-        		<h4><%= uebung[0].Bezeichnung %></h4>
-        	<% } %>
-        </div>
-
-        <div class="grid_6">
-          <h4><%= trainingsbezeichnung %></h4>
-        </div>
-
-        <div class="grid_6">
-       		<h3>Ergebnisse</h3>
-       		<form action="tracking" method="post">
+<!--START ‹bungsattribute auflisten-->		
+		<div class="grid_6">
+			<h4>Ergebnisse</h4>
+			<form action="tracking" method="post">
 				<% if(uebungsattribute){ %>
 						<input type="hidden" name="uebungsattribut" value="uebungsattribut">
 						<% uebungsattribute.forEach(function(entry){ %>
@@ -111,34 +113,35 @@
 						<input type="submit" value="eintragen">
 				<% } %>
 			</form>
-        </div>
-      </div>
+		</div>
+<!--END ‹bungsattribute auflisten-->	
 
+<!--START ‹bungen auflisten-->
       <div class="grid_6">
-      
-      
-        <div class="list-group">
-       		<% if(uebung){ %>
-				<% for(let entry of uebung) { %>
-					<li>
-						<form action="/tracking" method="post">
-							<li><button type="submit" name="uebung" value=<%= entry.UebungsID %>><%= entry.Bezeichnung %></button></li>
-						</form>
-					</li>
+			<h4>√úbungen</h4>
+			<div class="list-group">
+				<% if(uebung){ %>
+					<% for(let entry of uebung) { %>
+						<li>
+							<form action="/tracking" method="post">
+								<li><button type="submit" name="uebung" value=<%= entry.UebungsID %>><%= entry.Bezeichnung %></button></li>
+							</form>
+						</li>
+					<% }; %>
 				<% }; %>
-			<% }; %>
-        </div>
-
+			</div>
       </div>
+<!--END ‹bungen auflisten-->
 
       <hr>
-
+<!--START Footer-->
       <div class="grid_6">
-        <p align="right">Kontakt | Impressum </p>
+      	<p align="right">Kontakt | Impressum </p>
       </div>
+<!--END Footer-->
 
     </div>
-    <!-- end .container_12 -->
+<!--END Wrapper-->
 
   </body>
 </html>
