@@ -1,0 +1,610 @@
+/*
+  960 Grid System ~ Text CSS.
+  Learn more ~ http://960.gs/
+
+  Licensed under GPL and MIT.
+*/
+
+
+body {
+  background: #ffffff;
+  font-size: 11px;
+  font: 13px/1.5 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+  height: auto;
+  padding-bottom: 20px;
+}
+
+a {
+  color: #337ab7;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  font-family: "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+  font-weight: normal;
+  padding-top: 20px;
+}
+
+h2 {
+  padding-top: 20px;
+}
+
+p {
+  /*border: 1px solid #666;*/
+  overflow: hidden;
+  padding: 2px 0;
+}
+
+h6.uebungen,
+p.uebungen {
+  overflow: hidden;
+  padding: 0px 0;
+  line-height: 1em;
+  margin-bottom: -1px;
+
+}
+/* `Basic HTML
+----------------------------------------------------------------------------------------------------*/
+
+
+
+pre,
+code {
+  font-family: "DejaVu Sans Mono", Menlo, Consolas, monospace;
+}
+
+hr {
+  border: 0 solid #ccc;
+  border-top-width: 1px;
+  clear: both;
+  height: 0;
+}
+
+/* `Headings
+----------------------------------------------------------------------------------------------------*/
+
+h1 {
+  font-size: 25px;
+  color: #045FB4;
+}
+
+h2 {
+  font: 13px/1.5 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+  overflow: hidden;
+  padding: 0px 0;
+  font-weight: bold;}
+
+h3 {
+  font-size: 15px;
+  color: #045FB4;
+}
+
+h4 {
+  font-size: 19px;
+  color: #045FB4;
+
+}
+
+h5 {
+  font-size: 17px;
+}
+
+h6 {
+  font: 13px/1.5 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+  overflow: hidden;
+  padding: 2px 0;
+  font-weight: bold;
+}
+
+/* `Spacing
+----------------------------------------------------------------------------------------------------*/
+
+ol {
+  list-style: decimal;
+}
+
+ul {
+	list-style-type: none;
+	list-style: none;
+}
+
+li {
+	list-style-type: none;
+	list-style: none;
+	margin-right: 0px;
+}
+
+p,
+dl,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ol,
+ul,
+pre,
+address,
+fieldset,
+figure {
+  margin-bottom: 15px;
+}
+
+.container_12,
+.container_16,
+.container_24 {
+  background-color: #fff;
+  background-repeat: repeat-y;
+  margin-bottom: 20px;
+}
+
+/*Login*/
+
+
+.form-control {
+  display: block;
+  width: 100%;
+  height: 34px;
+  /*padding: 6px 12px;*/
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.btn {
+  display: inline-block;
+  padding: 3.5px 12px;
+  margin-bottom: 0.5em;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+  margin-top: 0em;
+}
+
+
+.btn-primary:focus,
+.btn-primary.focus {
+  color: #fff;
+  background-color: #286090;
+  border-color: #122b40;
+}
+.btn-primary:hover {
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74;
+}
+.btn-primary:active,
+.btn-primary.active,
+.open > .dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74;
+}
+.btn-primary:active:hover,
+.btn-primary.active:hover,
+.open > .dropdown-toggle.btn-primary:hover,
+.btn-primary:active:focus,
+.btn-primary.active:focus,
+.open > .dropdown-toggle.btn-primary:focus,
+.btn-primary:active.focus,
+.btn-primary.active.focus,
+.open > .dropdown-toggle.btn-primary.focus {
+  color: #fff;
+  background-color: #204d74;
+  border-color: #122b40;
+}
+
+.help-block {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-family:Century Gothic, sans-serif;
+  color: #a94442;
+}
+
+<!--Menü Css-->
+
+
+/* Menu */
+
+.nav {
+  background-color: #367ec3;
+
+}
+
+.menu {
+ list-style-type: none;
+ margin: 0;
+ width:100%;
+ padding: 0;
+ overflow: hidden;
+ background-color: #367ec3;
+ line-height: 25px;
+ border-radius: 3px;
+
+}
+
+
+.menu li {
+ float: left;
+}
+
+.menu li a {
+ display: block;
+ color: white;
+ text-align: center;
+ padding: 14px 16px;
+ text-decoration: none;
+ width:188px;
+
+}
+
+.menu li ul{
+    display: none;
+}
+
+.menu li a:hover {
+ background-color: #6fa4d7;
+}
+
+.active{
+    background: #6fa4d7;
+}
+
+/* sub menu */
+.submenu{
+    position: absolute;
+    list-style: none;
+    color: black;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding-left: 0;
+}
+
+.submenu li{
+    width: 100%;
+    float: none;
+}
+.submenu li a{
+    color: black;
+}
+.submenu li a:hover{
+    background-color: #6fa4d7;
+    color:white;
+}
+
+.menu li:hover .submenu{
+    display: block;
+}
+
+.subactive{
+    background: #6fa4d7;
+    color:white;
+
+}
+
+/* Footer*/
+.footer {
+    background: #BDBDBD;
+    height: 40px;
+    margin-top: 10%;
+    border-radius: 0px 0px 10px 10px;
+	  height: relative;
+    font-color: #ffffff;
+	  z-index: 999;
+
+}
+
+#id {
+  margin: 3em;
+}
+
+
+
+/*------------------------------------*\
+-------- DEMO Code: accordion
+\*------------------------------------*/
+/*----- Accordion -----*/
+.accordion, .accordion * {
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+}
+
+.accordion {
+	overflow:hidden;
+	box-shadow:0px 1px 3px rgba(0,0,0,0.25);
+	border-radius:3px;
+	background:#f7f7f7;
+}
+
+/*----- Section Titles -----*/
+.accordion-section-title {
+	width:100%;
+	padding:15px;
+	display:inline-block;
+	border-bottom:1px solid #1a1a1a;
+	background:#045FB4;
+	transition:all linear 0.15s;
+	/* Type */
+	text-shadow:0px 1px 0px #1a1a1a;
+	color:#fff;
+}
+
+.accordion-section-title.active, .accordion-section-title:hover {
+	background:#367ec3;
+	/* Type */
+	text-decoration:none;
+}
+
+.accordion-section:last-child .accordion-section-title {
+	border-bottom:none;
+}
+
+/*----- Section Content -----*/
+.accordion-section-content {
+	padding:15px;
+	display:none;
+}
+
+/*Box*/
+#bereich {
+    background-color: #f7f7f7;
+    height: 70px;
+    padding: 10px;
+    border: 2px #367ec3 solid;
+    margin-bottom: 10px;
+}
+#bereich2 {
+    background-color: #f7f7f7;
+    height: 50px;
+    padding: 10px;
+    border: 2px #367ec3 solid;
+    margin-bottom: 10px;
+}
+
+
+.uebungenanfuegen {
+    background-color: #367ec3;
+    border: none;
+    color: white;
+    padding: 5px 9px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.uebungenanfuegen:hover {
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74;
+}
+
+.auswahl {
+  width: 200px;
+}
+
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+.list-group-item:first-child {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+a.list-group-item, button.list-group-item {
+    color: #555;
+}
+.list-group-item {
+    position: relative;
+    display: block;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+        border-top-color: rgb(221, 221, 221);
+        border-right-color: rgb(221, 221, 221);
+        border-bottom-color: rgb(221, 221, 221);
+        border-left-color: rgb(221, 221, 221);
+}
+a.list-group-item:focus, a.list-group-item:hover, button.list-group-item:focus, button.list-group-item:hover {
+    color: #555;
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+.list-group-item:last-child {
+    margin-bottom: 0;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+a.list-group-item, button.list-group-item {
+    color: #555;
+}
+a:focus, a:hover {
+    color: #23527c;
+    text-decoration: underline;
+}
+a:active, a:hover {
+    outline: 0;
+}
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 3px 10px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+a {
+    color: #337ab7;
+    text-decoration: none;
+}
+a {
+    background-color: transparent;
+}
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.list-group-item.active .list-group-item-heading, .list-group-item.active .list-group-item-heading > .small, .list-group-item.active .list-group-item-heading > small, .list-group-item.active:focus .list-group-item-heading, .list-group-item.active:focus .list-group-item-heading > .small, .list-group-item.active:focus .list-group-item-heading > small, .list-group-item.active:hover .list-group-item-heading, .list-group-item.active:hover .list-group-item-heading > .small, .list-group-item.active:hover .list-group-item-heading > small {
+    color: inherit;
+}
+a.list-group-item .list-group-item-heading, button.list-group-item .list-group-item-heading {
+    color: #333;
+}
+.list-group-item-heading {
+    margin-top: 0;
+    margin-bottom: -1px;
+}
+
+p.list-group-item-text{
+  overflow: hidden;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+h4.list-group-item-heading{
+  overflow: hidden;
+  font-size: 15px;
+}
+
+.roundgravatar {
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  background: url('bild.jpg');
+  border: 1px solid #ccc;
+  -webkit-border-radius: 53px;
+  -khtml-border-radius: 53px;
+  -moz-border-radius: 53px;
+  border-radius: 53px; }
+
+  .roundgravatar2 {
+    padding: 0;
+    width: 100px;
+    height: 100px;
+    background: url('bild.jpg');
+    border: 1px solid #ccc;
+    -webkit-border-radius: 53px;
+    -khtml-border-radius: 53px;
+    -moz-border-radius: 53px;
+    border-radius: 53px; }
+
+  /*nutzer*/
+  * {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 12px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 12px;
+  height: 100px;
+
+}
+
+#myTable th {
+  text-align: left;
+  padding: 12px;
+  font-weight: bold;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 12px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header{
+  background-color: #367ec3;
+  font: #ffffff;
+
+}
+
+
+#myTable tr:hover {
+  background-color: #CEE3F6;
+  font: #ffffff;
+}
+
+
+#myTable td:hover {
+  text-align: left;
+  padding: 12px;
+}
+
+.scroll {
+height: 300px;
+overflow: scroll;
+ border: 1px solid #ddd;}
+
+input {
+    width: 100%;
+    margin-bottom: -5px;
+
+}
+
+select.auswahl {
+width: 333px;
+height: 30px;
+font: 13px/1.5 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+}
+
+select.auswahl2 {
+  width: 200px;
+height: 30px;
+font: 13px/1.5 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+}

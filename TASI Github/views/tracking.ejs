@@ -103,9 +103,10 @@
        		<h3>Ergebnisse</h3>
        		<form action="tracking" method="post">
 				<% if(uebungsattribute){ %>
+						<input type="hidden" name="uebungsattribut" value="uebungsattribut">
 						<% uebungsattribute.forEach(function(entry){ %>
 							<label><%= entry.Bezeichnung %></label><br>
-							<input type="text" name="uebungsattribut" placeholder="Wert"><br><br>
+							<input type="text" name= <%= entry.UebungsattributID %> placeholder="Wert"><br><br>
 						<% }) %>
 						<input type="submit" value="eintragen">
 				<% } %>
@@ -114,7 +115,8 @@
       </div>
 
       <div class="grid_6">
-
+      
+      
         <div class="list-group">
        		<% if(uebung){ %>
 				<% for(let entry of uebung) { %>

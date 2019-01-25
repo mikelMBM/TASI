@@ -1,0 +1,277 @@
+<script>
+  function activate(p1, p2) {
+    var ausguebung = document.getElementsByClassName("list-group-item active");
+    if (ausguebung.length > 0) {
+      ausguebung["0"].className = "list-group-item";
+    }
+    ausguebung = document.getElementById(p1);
+    ausguebung.className = ausguebung.className + " active";
+
+    //document.getElementById("uebungsbezeichnung").textContent = p3[p1].Bezeichnung;
+    
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if(this.readyState == 4 && this.status == 200) {
+        document.getElementById("einzelneuebung").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "/uebunganzeigen/" + p1 + "/" + p2, true);
+    xhttp.send();
+  }
+
+  function changeplan() {
+    var redir = document.getElementById("plans").options[document.getElementById("plans").selectedIndex].value;
+    var url = "/training/" + redir;
+    window.location.href = url;
+  }
+  
+  function preventInput(event){
+	var char = event.charCode;
+	if((!(char > 47 && char < 58) || char == 46)){
+
+	}
+  }
+  
+  
+</script>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Profil - TASI Trainingsassistent</title>
+    <link rel="stylesheet" href="/css/960_12_col_rtl.css" />
+    <link rel="stylesheet" href="/css/reset_rtl.css" />
+    <link rel="stylesheet" href="/css/formatierung.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src='js/menu.js'></script>
+    
+<!--START Imports for Chart-->
+    <link rel="stylesheet" type="text/css" href="./css/chart.css">
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="./js/chart-001.js"></script>
+<!--END Imports for Chart-->
+  </head>
+
+
+  <body>
+<!--START .container_12-->
+    <div class="container_12">
+
+
+
+<!-- START Menu-->
+      <div class="grid_12">
+          <a href="/profil.html"><img src="/Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
+          <div class="nav">
+        
+          <ul class='menu'>
+          <li><a  href="/start">Profil</a></li>
+          <li><a  href="/uebungssammlung">√úbungen</a></li>
+          <li><a  href="/training">Training</a></li>
+          <% if (roleid == 1) { %>
+            <li><a href="trainer.html">Trainerbereich</a>
+                <ul class='submenu'>
+                    <li><a href="/createtrainingplan">Plan erstellen</a></li>
+                    <li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
+                </ul>
+            </li>
+          <% } %>
+          <% if(roleid == 2) { %>
+            <li><a href="trainerbereich.html">Spielerbereich</a></li>
+          <% } %>
+          <li><a href="/logout">Ausloggen</a></li>
+        </ul></div>
+        </div>
+
+      <div class="grid_12">
+        <h1></h1>
+      </div>
+      <hr>
+<!--END Menu-->
+
+<!--START Auswahlmen¸ f¸r ‹bungen-->
+	<div class="grid_12">
+		<form action="/achievements" method="post">
+			<select id="uebung" class="auswahl" name="uebung" style="width: 365px" onchange="this.form.submit()" >
+					  <option disabled selected>√úbung ausw√§hlen</option>
+					  <optgroup label="√úbungen">
+							<% if(uebungen){ %>
+								<% if(uebungen.hasOwnProperty('UebungsIDs')){ %>
+									<% for(i=0; i<uebungen.UebungsIDs.length; i++){ %>
+										<option value='<%= uebungen.UebungsIDs[i] %>'><%= uebungen.UebungsBezeichnungen[i] %></option> 					
+									<% } %>
+								<% } %>
+							<% } %>
+					  </optgroup>
+			</select>
+		</form>
+	</div> 
+<!-- END Auswahlmen¸ f¸r ‹bungen-->	
+
+
+<!--START Werte als Eingabefelder anzeigen-->
+	<div class="grid_6">
+		<h3>Ergebnisse</h3><br>		
+
+		<% if(achievements){ %>
+				<% if(achievements.hasOwnProperty('Wiederholungen')){ %>
+					Wiederholungen:
+					<% achievements.Wiederholungen.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							<form action="/achievements" method="post">
+								<input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
+								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
+								<input class="btn btn-primary" type="submit" value="ok"></br></br>
+							</form>
+						<% } %>
+					<% }) %></br>
+				<% } %>
+				
+				<% if(achievements.hasOwnProperty('Evaluation')){ %>
+					Einsch√§tzung:
+					<% achievements.Evaluation.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							<form action="/achievements" method="post">
+								<input type="number" step="1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
+								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
+								<input class="btn btn-primary" type="submit" value="ok"></br></br>
+							</form>
+						<% } %>
+					<% }) %></br>
+				<% } %>
+				
+				<% if(achievements.hasOwnProperty('DauerSec')){ %>
+					Dauer in Sekunden:
+					<% achievements.DauerSec.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							<form action="/achievements" method="post">
+								<input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
+								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
+								<input class="btn btn-primary" type="submit" value="ok"></br></br>
+							</form>
+						<% } %>
+					<% }) %></br>
+				<% } %>
+				
+				<% if(achievements.hasOwnProperty('DauerMin')){ %>
+					Dauer in Minuten:
+					<% achievements.DauerMin.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							<form action="/achievements" method="post">
+								<input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
+								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
+								<input class="btn btn-primary" type="submit" value="ok"></br></br>
+							</form>
+						<% } %>
+					<% }) %></br>
+				<% } %>		
+				
+				<% if(achievements.hasOwnProperty('StreckeMeter')){ %>
+					Strecke in Meter:
+					<% achievements.StreckeMeter.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							<form action="/achievements" method="post">
+								<input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
+								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
+								<input class="btn btn-primary" type="submit" value="ok"></br></br>
+							</form>
+						<% } %>
+					<% }) %></br>
+				<% } %>							
+			</form>
+			
+		<% } %>	
+	</div>
+<!--END Werte als Eingabefelder anzeigen-->
+
+<!--START Chart-->
+	<div class="grid_6">
+		<% if(achievements){ %>	
+			<script>
+				var data = [];
+			<!--START Attribut Wiederholungen-->
+				<% if(achievements.hasOwnProperty('Wiederholungen')){ %>
+					var i = 1;
+					<% achievements.Wiederholungen.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
+							data.push(WertObj);
+							i++;
+						<% } %>
+					<% }) %>
+				<% } %>
+			<!--END Attribut Wiederholungen-->
+			
+			<!--START Attribut Evaluation-->
+				<% if(achievements.hasOwnProperty('Evaluation')){ %>
+					var i = 1;
+					<% achievements.Evaluation.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
+							data.push(WertObj);
+							i++;
+						<% } %>
+					<% }) %>
+				<% } %>
+			<!--END Attribut Evaluation-->	
+			
+			<!--START Attribut DauerSec-->
+				<% if(achievements.hasOwnProperty('DauerSec')){ %>
+					var i = 1;
+					<% achievements.DauerSec.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
+							data.push(WertObj);
+							i++;
+						<% } %>
+					<% }) %>
+				<% } %>
+			<!--END Attribut DauerSec-->	
+			
+			<!--START Attribut DauerMin-->
+				<% if(achievements.hasOwnProperty('DauerMin')){ %>
+					var i = 1;
+					<% achievements.DauerMin.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
+							data.push(WertObj);
+							i++;
+						<% } %>
+					<% }) %>
+				<% } %>
+			<!--END Attribut DauerMin-->
+
+			<!--START Attribut StreckeMeter-->
+				<% if(achievements.hasOwnProperty('StreckeMeter')){ %>
+					var i = 1;
+					<% achievements.StreckeMeter.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
+							data.push(WertObj);
+							i++;
+						<% } %>
+					<% }) %>
+				<% } %>
+			<!--END Attribut StreckeMeter-->
+			<!--START Funktion aus der importierten JS zur Ausgabe des Charts aufrufen-->
+				chart(data);
+			<!--END Funktion aus der importierten JS zur Ausgabe des Charts aufrufen-->
+			</script>
+		<% } %>		
+	</div>	
+<!--END Chart-->		
+
+<!--START Footer-->	
+	<hr>
+
+	<div class="grid_6">
+		<p align="right">Kontakt | Impressum </p>
+	</div>
+<!--END Footer-->	
+
+    </div>
+<!--END .container_12-->
+
+  </body>
+</html>
