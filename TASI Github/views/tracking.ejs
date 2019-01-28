@@ -24,6 +24,99 @@
     var url = "/training/" + redir;
     window.location.href = url;
   }
+  
+  
+  
+//START Michael
+	var time = 0;
+	var lapTime = 0;
+	var lapCounter = 0;
+	var running = false;
+
+	// Toggles the running state of our program
+	function startPause() {
+		if (!running) {
+				running = true;
+				increment();
+				document.getElementById('lap').style.display = "inline";
+				document.getElementById('startPause').innerHTML = "Pause";
+				document.getElementById('reset').style.display = "none";
+			} else{
+				running = false;
+				clearTimeout(timer);
+				document.getElementById('lap').style.display = "none";
+				document.getElementById('startPause').innerHTML = "Resume";
+				if (time > 0) {
+					document.getElementById('reset').style.display = "inline";
+				}
+			}
+	}
+
+	// Back to the default state
+	function reset() {
+		time = 0;
+		lapCounter = 0;
+		running = false;
+		clearTimeout(timer);
+		document.getElementById('startPause').innerHTML = "Start";
+		document.getElementById('output').innerHTML = "00:00:0";
+		document.getElementById('laps').innerHTML = "";
+		document.getElementById('reset').style.display = "none";
+	}
+
+	// Creates a unordered list with the lap time and resets the lap time
+	function lap() {
+		lapCounter++;
+		let p = document.createElement('OL');
+		let text = document.createTextNode('Lap #' + lapCounter + ': ' +timeToString(lapTime));
+		p.appendChild(text);
+		document.getElementById('laps').appendChild(p);
+		time = 0;
+		lapTime = 0;
+	}
+
+	function increment() {
+		timer = setTimeout(function() {
+			time++;
+			lapTime++;
+			//var hours = Math.floor(time / 10 / 60 / 60);
+			document.getElementById('output').innerHTML = timeToString();
+			increment();
+		}, 100);
+	}
+
+	function timeToString() {
+		var mins = Math.floor(time / 10 / 60);
+		var secs = Math.floor(time / 10 % 60);
+		var tenths = time % 10;
+		
+		if (mins < 10) {
+		mins = "0" + mins;
+		}
+		if (secs < 10) {
+		secs = "0" + secs;
+		}
+		return mins + ":" + secs + ":" + tenths;
+	}
+  
+	// ab hier Counter
+	var clicks = 0;
+	function onClickPlus() {
+		clicks += 1;
+		document.getElementById("clicks").value = clicks;
+	}
+
+	function onClickMinus() {
+		clicks -= 1;
+		document.getElementById("clicks").value = clicks;
+	}
+
+	// ab hier Slider
+	function sliderChange(val) {
+		document.getElementById('sliderStatus').innerHTML = val;
+	}
+//END Michael
+  
 </script>
 
 <html lang="en">
@@ -45,44 +138,42 @@
     <div class="container_12">
 
 <!--START Menu-->
-			<div class="grid_12">
-				<a href="/profil.html"><img src="/Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
-				<div class="nav">
-					<ul class='menu'>
-						<li><a  href="/start">Profil</a></li>
-						<li><a  href="/uebungssammlung">Übungen</a></li>
-						<li><a  href="/training">Training</a></li>
-						
-						<!--START Trainermenu-->
-						<% if (roleid == 1) { %>
-							<li><a href="trainer.html">Trainerbereich</a>
-								<ul class='submenu'>
-									<li><a href="/createtrainingplan">Plan erstellen</a></li>
-									<li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
-								</ul>
-							</li>
-						<% } %>
-						<!--END Trainermenu-->
-						
-						<!--START Spielermenu-->
-						<% if(roleid == 2) { %>
-							<li><a href="trainerbereich.html">Spielerbereich</a></li>
-						<% } %>
-						<!--END Spielermenu-->
-						
-						<li><a href="/logout">Ausloggen</a></li>
-					</ul>
-				</div>
-			</div>
-<!--END Menu-->        
-
+	<div class="grid_12">
+		<a href="/profil.html"><img src="/Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
+		<div class="nav">
+			<ul class='menu'>
+				<li><a  href="/start">Profil</a></li>
+				<li><a  href="/uebungssammlung">Übungen</a></li>
+				<li><a href="/training">Trainingspläne</a></li>
+				<% if (roleid == 1) { %>
+					<li><a href="/trainer">Trainerbereich</a>
+						<ul class='submenu'>
+							<li><a href="/createtrainingplan">Plan erstellen</a></li>
+							<li><a href="/overview">Spielerauswertung</a></li>
+							<li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
+						</ul>
+					</li>
+				<% } %>
+				<% if (roleid == 2) { %>
+					<li><a href="/spieler">Spielerbereich</a>
+						<ul class='submenu'>
+							<li><a href="/tracking">Meine Werte eintragen</a></li>
+							<li><a href="/achievements">Meine Werte anzeigen</a></li>
+						</ul>
+					</li>
+				<% } %>
+				<li><a href="/logout">Ausloggen</a></li>
+			</ul>
+		</div>
+	</div>
+<!--END Menu--> 
 
 <!--START Headline-->
 		  <div class="grid_12" id="trainingsbezeichnung">
-			<h1>Trainingspläne</h1>
-		  </div>
-      
+			<h1>Werte eintragen</h1>
+		  </div>      
 <!--END Headline-->
+
       <hr>
       
 <!--START Dropdown �bungsauswahl-->
@@ -133,6 +224,33 @@
       </div>
 <!--END �bungen auflisten-->
 
+
+
+<!-- Ab hier Michael-->
+                <!-- Slider -->
+                <h1> Slider </h1>
+                <input type="range" min="0" max="100" value="50" step="2" onChange="sliderChange(this.value)" />
+                <p> Slider Value (0-100) = <a id="sliderStatus">50</a></p>
+
+                <!-- Counter -->
+                <h1> Counter </h1>
+                <! Counter -->
+                <button type="button" onClick="onClickMinus()">-</button>
+                <button type="button" onClick="onClickPlus()">+</button>
+                <input type="number" name="uebungsattribut" id="clicks" placeholder="0">
+
+                <!-- Timer -->
+                <h1> Timer </h1>
+                <p id="output">00:00:0</p>
+                <div id="controls">
+                    <button id="startPause" onclick="startPause()">Start</button>
+                    <button id="reset" onclick="reset()">Reset</button>
+                    <button id="lap" onclick="lap()">Lap</button>
+                </div>
+                <p id="laps"></p>
+
+<!-- Bis hier Michael-->
+
       <hr>
 <!--START Footer-->
       <div class="grid_6">
@@ -145,3 +263,5 @@
 
   </body>
 </html>
+
+

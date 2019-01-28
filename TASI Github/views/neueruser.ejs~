@@ -1,0 +1,334 @@
+<script>
+  function useranlegen(){
+    var username = document.getElementById("username").value;
+    var vorname = document.getElementById("vorname").value;
+    var nachname = document.getElementById("nachname").value;
+    var position = document.getElementById("position").value;
+    var geburtstag = document.getElementById("geburtstag").value;
+    var mail = document.getElementById("mail").value;
+    var strasse = document.getElementById("strasse").value;
+    var stadt = document.getElementById("stadt").value;
+
+
+    var status = "";
+    if(document.getElementById("status").value == "Spieler") {
+      status = "2";
+    }else if(document.getElementById("status").value == "Trainer") {
+      status = "1";
+    }
+
+    var mannschaft = [];
+    mannschaft = $('select[multiple]').val();
+    
+    $.ajax({
+      url: "/saveuser",
+      method: "POST",
+      data: {
+        username: username,
+        vorname: vorname,
+        nachname: nachname,
+        position: position,
+        geburtstag: geburtstag,
+        mail: mail,
+        strasse: strasse,
+        stadt: stadt,
+        status: status,
+        mannschaft: mannschaft
+      },
+      success: function(data) {
+        alert("User gespeichert");
+      }
+    });
+  }
+
+  function useraendern(){
+    var username = document.getElementById("username").value;
+    var vorname = document.getElementById("vorname").value;
+    var nachname = document.getElementById("nachname").value;
+    var position = document.getElementById("position").value;
+    var geburtstag = document.getElementById("geburtstag").value;
+    var mail = document.getElementById("mail").value;
+    var strasse = document.getElementById("strasse").value;
+    var stadt = document.getElementById("stadt").value;
+
+    var status = "";
+    if(document.getElementById("status").value == "Spieler") {
+      status = "2";
+    }else if(document.getElementById("status").value == "Trainer") {
+      status = "1";
+    }
+
+    var mannschaft = [];
+    mannschaft = $('select[multiple]').val();
+
+    $.ajax({
+      url: "/useredit",
+      method: "POST",
+      data: {
+        username: username,
+        vorname: vorname,
+        nachname: nachname,
+        position: position,
+        geburtstag: geburtstag,
+        mail: mail,
+        strasse: strasse,
+        stadt: stadt,
+        status: status,
+        mannschaft: mannschaft
+      },
+      success: function(data){
+        alert("User geändert");
+      }
+
+    });
+  }
+
+  function neworchangetest(neworchange) {
+    if(neworchange != 0) {
+      $.ajax({
+        url: "/showuser",
+        method: "POST",
+        data: {
+          usid: neworchange
+        },
+        success: function(data) {
+			document.getElementById("username").value = data.username;
+			document.getElementById("vorname").value = data.vorname;
+			document.getElementById("nachname").value = data.nachname;
+			document.getElementById("position").value = data.position;
+			document.getElementById("geburtstag").value = data.geburtstag;
+			document.getElementById("mail").value = data.mail;
+			document.getElementById("strasse").value = data.strasse;
+			document.getElementById("stadt").value = data.stadt;
+			document.getElementById("status").value = data.status;
+			document.getElementById("NewOrChange").value = "ändern";
+			document.getElementById("usertitle").textContent = data.vorname + " " + data.nachname;
+			document.getElementById("NewOrChange").onclick = useraendern;
+        }
+      });
+    }else{
+			document.getElementById("NewOrChange").onclick = useranlegen;
+    }
+  }
+</script>
+
+
+
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Profil - TASI Trainingsassistent</title>
+<link rel="stylesheet" href="/css/960_12_col.css" />
+<link rel="stylesheet" href="/css/reset_rtl.css" />
+<link rel="stylesheet" href="/css/formatierung.css" />
+<!-- Menü -->
+<script src='/js/menu3.0.0.js' type='text/javascript'></script>
+<script src='/js/menu.js'></script>
+
+<!-- Multiselect -->
+
+<link href="/css/jquery.multiselect.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="/js/jquery.multiselect.js"></script>
+
+
+
+<style>
+.ms-options-wrap > .ms-options > ul li.selected label,
+.ms-options-wrap > .ms-options > ul label:hover {
+background-color: #367ec3;
+color: #ffffff
+}
+.ms-options-wrap > button:focus,
+.ms-options-wrap > button {
+    position: relative;
+    width: 100%;
+    height: 21.5px;
+    text-align: left;
+    border: 1px solid #aaa;
+    background-color: #ffffff;
+    padding: 5px 20px 5px 5px;
+    margin-top: 0px;
+    margin-bottom: -0px;
+    font: 11px/0.8 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+    color: #000000;
+
+}
+
+.ms-options-wrap > .ms-options {
+    height: 80px;
+    position: absolute;
+    left: 790px;
+    font: 11px/0.8 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+    width: 140px;
+    margin-top: -5px;
+    margin-bottom: 20px;
+    background: white;
+    z-index: 2000;
+    border: 1px solid #aaa;
+    overflow: auto;
+    visibility: hidden;
+}
+
+.ms-options-wrap > .ms-options > ul input[type="checkbox"] {
+    margin: 0 5px 0 0;
+    position: absolute;
+    left: 50px;
+    top: 3px;
+}
+
+
+</style>
+
+</head>
+
+
+<body onload="neworchangetest(<%= neworchange %>)">
+<!--START Wrapper-->
+  <div class="container_12">
+
+
+<!--START Menu-->
+	<div class="grid_12">
+		<a href="/profil.html"><img src="Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
+		<div class="nav">
+			<ul class='menu'>
+			<li><a  href="/start">Profil</a></li>
+			<li><a  href="/uebungssammlung">Übungen</a></li>
+			<li><a  href="/training">Training</a></li>
+			<% if (roleid == 1) { %>
+			  <li><a href="trainer.html">Trainerbereich</a>
+				  <ul class='submenu'>
+					  <li><a href="/createtrainingplan">Plan erstellen</a></li>
+					  <li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
+				  </ul>
+			  </li>
+			<% } %>
+			<% if(roleid == 2) { %>
+			  <li><a href="trainerbereich.html">Spielerbereich</a></li>
+			<% } %>
+			<li><a href="/logout">Ausloggen</a></li>
+		  </ul>
+	  </div>
+	</div>
+<!--END Menu-->
+
+	<div class="grid_12">
+		<h1>Neuer User</h1>
+	</div>
+	<hr>
+
+	<div class="grid_6">
+		<h4>Nutzer verwalten</h4>
+	</div>
+
+	<div class="grid_6">
+		<h4 id="usertitle">User XY</h4>
+	</div>
+
+
+	<div class="grid_6">
+		<a href="neueruser.html"><img src="/Bilder/plus.png" width="15" alt="bearbeiten"/>&nbsp; Neuen User anlegen</a>
+		<br></br>
+		<input type="text" id="myInput" onkeyup="search()" placeholder="Nach Namen suchen.." title="Type in a name">
+		<div class="scroll">
+			<table id="myTable">
+				<% for(entry of users) { %>
+				  <tr onclick="showuser(<%= entry.NutzerID %>)">
+					<td><div id="<%= entry.NutzerID %>" class="roundgravatar" style='background: url("/<%= entry.bild %>");'></div></td>
+					<td><%= entry.vorname %> <%= entry.nachname %></td>
+					<td><%= entry.email %></td>
+				  </tr>
+			  <% } %>
+			</table>
+		</div>
+
+		<script>
+			function search() {
+			  var input, filter, table, tr, td, i;
+			  input = document.getElementById("myInput");
+			  filter = input.value.toUpperCase();
+			  table = document.getElementById("myTable");
+			  tr = table.getElementsByTagName("tr");
+			  for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[1];
+				if (td) {
+				  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				  } else {
+					tr[i].style.display = "none";
+				  }
+				}
+			  }
+			}
+		</script><br></br>
+	</div>
+
+
+	<div class="grid_2" style="margin-top:33px">
+		<h6>Username</h6>
+		<h6>Name</h6>
+		<br>
+		<h6>Status</h6>
+		<h6>Mannschaft</h6>
+		<h6>Position</h6>
+		<h6>Geburtstag</h6>
+		<h6>E-Mail</h6>
+		<h6>Straße, Nr.</h6>
+		<h6>PLZ & Stadt</h6>
+	</div>
+
+	<div class="grid_2" style="margin-top:33px" id="eingabebereich">
+		<p><input type="text" name="username" value=" Username" id="username" /></p>
+		<p><input type="text" name="name" value=" Vorname" id="vorname" /></p>
+		<p><input type="text" name="name" value=" Nachname" id="nachname" /></p>
+		<p><select class="status" name="status" style="width: 140px" id="status">
+			<option disabled selected>Spieler</option>
+			<option>Spieler</option>
+		</select></p>
+		<p><select class="mannschaftnutzer" name="basic[]" multiple="multiple" id="mannschaft">
+		  <% for(entry of mannschaften) { %>
+			<option value="<%= entry.MannschaftsID %>"><%= entry.Bezeichnung %></option>
+		  <% } %>
+		</select></p>
+		<p><input type="text"  name="position" value="Position" id="position"/></p>
+		<p><input type="text"  name="geburtstag" value="Geburtstag" id="geburtstag"/></p>
+		<p><input type="text"  name="email" value="E-Mail" id="mail"/></p>
+		<p><input type="text"  name="Straße" value="Straße, Nr." id="strasse"/></p>
+		<p><input type="text"  name="Stadt" value="PLZ & Stadt" id="stadt"/></p>
+
+		<script>
+		$('select[multiple]').multiselect({
+			columns  : 1,
+			search   : false,
+			selectAll: true,
+		
+			texts    : {
+				placeholder: 'Mannschaft',
+			}
+		});
+		</script>
+	</div>
+
+	<div class="grid_2" style="margin-top:33px">
+		<div class="roundgravatar2" style="background: url('bilder/user.png');"></div>
+		<br>
+		<!-- <p><img src="Bilder/photo-camera.png" width="15" alt="hochladen" />  Bild hochladen</p>-->
+		<input type="submit" class="btn btn-primary" id="NewOrChange" value="speichern" onclick="useranlegen()">
+		<input type="submit" class="btn btn-primary" value="abbrechen" href="/nutzerverwaltung">
+	</div></br>
+
+<hr>
+
+<!--START Footer-->
+    <div class="grid_12">
+    	<p align="right">Kontakt | Impressum </p>
+    </div>
+<!--END Footer-->
+
+</div>
+<!--END Wrapper-->
+
+</body>
+</html>

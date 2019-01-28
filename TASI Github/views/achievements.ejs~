@@ -65,21 +65,29 @@
 			<ul class='menu'>
 				<li><a  href="/start">Profil</a></li>
 				<li><a  href="/uebungssammlung">Übungen</a></li>
-				<li><a href="/training">Trainingspläne</a></li>
 				<% if (roleid == 1) { %>
-					<li><a href="/trainer">Trainerbereich</a>
+					<li><a href="/training">Aktuelles Training</a>
 						<ul class='submenu'>
-							<li><a href="/createtrainingplan">Plan erstellen</a></li>
-							<li><a href="/overview">Spielerauswertung</a></li>
-							<li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
+							<li><a href="/training">Trainingspläne</a></li>
+							<li><a href="/overview">Trainingswerte anzeigen</a></li>
 						</ul>
 					</li>
 				<% } %>
 				<% if (roleid == 2) { %>
-					<li><a href="/spieler">Spielerbereich</a>
+					<li><a href="/training">Aktuelles Training</a>
 						<ul class='submenu'>
+							<li><a href="/training">Trainingspläne</a></li>
 							<li><a href="/tracking">Meine Werte eintragen</a></li>
 							<li><a href="/achievements">Meine Werte anzeigen</a></li>
+						</ul>
+					</li>
+					<li><a href="/spieler">Spielerbereich</a></li>
+				<% } %>
+				<% if (roleid == 1) { %>
+					<li><a href="/trainer">Trainerbereich</a>
+						<ul class='submenu'>
+							<li><a href="/createtrainingplan">Plan erstellen</a></li>
+							<li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
 						</ul>
 					</li>
 				<% } %>
@@ -87,7 +95,7 @@
 			</ul>
 		</div>
 	</div>
-<!--END Menu-->   
+<!--END Menu-->  
 
 <!--START Headline-->
 		  <div class="grid_12" id="werte">

@@ -24,6 +24,99 @@
     var url = "/training/" + redir;
     window.location.href = url;
   }
+  
+  
+  
+//START Michael
+	var time = 0;
+	var lapTime = 0;
+	var lapCounter = 0;
+	var running = false;
+
+	// Toggles the running state of our program
+	function startPause() {
+		if (!running) {
+				running = true;
+				increment();
+				document.getElementById('lap').style.display = "inline";
+				document.getElementById('startPause').innerHTML = "Pause";
+				document.getElementById('reset').style.display = "none";
+			} else{
+				running = false;
+				clearTimeout(timer);
+				document.getElementById('lap').style.display = "none";
+				document.getElementById('startPause').innerHTML = "Resume";
+				if (time > 0) {
+					document.getElementById('reset').style.display = "inline";
+				}
+			}
+	}
+
+	// Back to the default state
+	function reset() {
+		time = 0;
+		lapCounter = 0;
+		running = false;
+		clearTimeout(timer);
+		document.getElementById('startPause').innerHTML = "Start";
+		document.getElementById('output').innerHTML = "00:00:0";
+		document.getElementById('laps').innerHTML = "";
+		document.getElementById('reset').style.display = "none";
+	}
+
+	// Creates a unordered list with the lap time and resets the lap time
+	function lap() {
+		lapCounter++;
+		let p = document.createElement('OL');
+		let text = document.createTextNode('Lap #' + lapCounter + ': ' +timeToString(lapTime));
+		p.appendChild(text);
+		document.getElementById('laps').appendChild(p);
+		time = 0;
+		lapTime = 0;
+	}
+
+	function increment() {
+		timer = setTimeout(function() {
+			time++;
+			lapTime++;
+			//var hours = Math.floor(time / 10 / 60 / 60);
+			document.getElementById('output').innerHTML = timeToString();
+			increment();
+		}, 100);
+	}
+
+	function timeToString() {
+		var mins = Math.floor(time / 10 / 60);
+		var secs = Math.floor(time / 10 % 60);
+		var tenths = time % 10;
+		
+		if (mins < 10) {
+		mins = "0" + mins;
+		}
+		if (secs < 10) {
+		secs = "0" + secs;
+		}
+		return mins + ":" + secs + ":" + tenths;
+	}
+  
+	// ab hier Counter
+	var clicks = 0;
+	function onClickPlus() {
+		clicks += 1;
+		document.getElementById("clicks").value = clicks;
+	}
+
+	function onClickMinus() {
+		clicks -= 1;
+		document.getElementById("clicks").value = clicks;
+	}
+
+	// ab hier Slider
+	function sliderChange(val) {
+		document.getElementById('sliderStatus').innerHTML = val;
+	}
+//END Michael
+  
 </script>
 
 <html lang="en">
@@ -41,93 +134,142 @@
 
 
   <body>
+<!--START Wrapper-->
     <div class="container_12">
 
+<!--START Menu-->
+			<div class="grid_12">
+				<a href="/profil.html"><img src="/Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
+				<div class="nav">
+					<ul class='menu'>
+						<li><a  href="/start">Profil</a></li>
+						<li><a  href="/uebungssammlung">√úbungen</a></li>
+
+						<li><a href="/training">Training</a>
+							<ul class='submenu'>
+								<li><a href="/tracking">Werte eintragen</a></li>
+								<li><a href="/achievements">Meine Werte</a></li>
+							</ul>
+						</li>
+						
+						<!--START Trainermenu-->
+						<% if (roleid == 1) { %>
+							<li><a href="trainer.html">Trainerbereich</a>
+								<ul class='submenu'>
+									<li><a href="/createtrainingplan">Plan erstellen</a></li>
+									<li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
+								</ul>
+							</li>
+						<% } %>
+						<!--END Trainermenu-->
+						
+						<!--START Spielermenu-->
+						<% if(roleid == 2) { %>
+							<li><a href="trainerbereich.html">Spielerbereich</a></li>
+						<% } %>
+						<!--END Spielermenu-->
+						
+						<li><a href="/logout">Ausloggen</a></li>
+					</ul>
+				</div>
+			</div>
+<!--END Menu-->        
 
 
-
-      <!--Men√º-->
-      <div class="grid_12">
-          <a href="/profil.html"><img src="/Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
-          <div class="nav">
-        
-          <ul class='menu'>
-          <li><a  href="/start">Profil</a></li>
-          <li><a  href="/uebungssammlung">√úbungen</a></li>
-          <li><a  href="/training">Training</a></li>
-          <% if (roleid == 1) { %>
-            <li><a href="trainer.html">Trainerbereich</a>
-                <ul class='submenu'>
-                    <li><a href="/createtrainingplan">Plan erstellen</a></li>
-                    <li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
-                </ul>
-            </li>
-          <% } %>
-          <% if(roleid == 2) { %>
-            <li><a href="trainerbereich.html">Spielerbereich</a></li>
-          <% } %>
-          <li><a href="/logout">Ausloggen</a></li>
-        </ul></div>
-        </div>
-
-      <div class="grid_12" id="trainingsbezeichnung">
-        <h1>Trainingspl√§ne</h1>
-      </div>
+<!--START Headline-->
+		  <div class="grid_12" id="trainingsbezeichnung">
+			<h1>Trainingspl√§ne</h1>
+		  </div>
+      
+<!--END Headline-->
       <hr>
+      
+<!--START Dropdown ‹bungsauswahl-->
+		<div class="grid_12">
+			<form action="/tracking" method="post">
+				<select id="plans" class="auswahl" name="trainingsID" style="width: 365px" onchange="this.form.submit()" >
+					<option disabled selected>Trainingsplan ausw√§hlen</option>
+					<optgroup label="Bestehende Pl√§ne">
+						<% for(entry of allplans) { %>
+						  <option value='<%= entry.TrainingsID %>'><%=entry.Bezeichnung %></option>
+						<% } %>
+					</optgroup>
+				</select>
+			</form>
+		</div><br></br>  
+<!--END Dropdown ‹bungsauswahl-->  
 
-      <div class="grid_12">
-        <select id="plans" class="auswahl" name="Spieler" style="width: 365px" >
-          <option disabled selected>Trainingsplan ausw√§hlen</option>
-          <optgroup label="Bestehende Pl√§ne">
-            <% for(entry of allplans) { %>
-              <option value='<%= entry.TrainingsID %>'><%=entry.Bezeichnung %></option>
-            <% } %>
-          </optgroup>
-        </select>
-        <button class="uebungenanfuegen" style="width:90px" onclick="changeplan()">Ausw√§hlen</button>
-      </div><br></br>      
+<!--START ‹bungsattribute auflisten-->		
+		<div class="grid_6">
+			<h4>Ergebnisse</h4>
+			<form action="tracking" method="post">
+				<% if(uebungsattribute){ %>
+						<input type="hidden" name="uebungsattribut" value="uebungsattribut">
+						<% uebungsattribute.forEach(function(entry){ %>
+							<label><%= entry.Bezeichnung %></label><br>
+							<input type="text" name= <%= entry.UebungsattributID %> placeholder="Wert"><br><br>
+						<% }) %>
+						<input type="submit" value="eintragen">
+				<% } %>
+			</form>
+		</div>
+<!--END ‹bungsattribute auflisten-->	
 
-     <div id="einzelneuebung">
-        <div class="grid_6" id="uebungsbezeichnung">
-          <h4><%= uebung[0].Bezeichnung %></h4>
-        </div>
-
-        <div class="grid_6">
-          <h4><%= trainingsbezeichnung %></h4>
-        </div>
-
-        <div class="grid_6">
-       		<h3>Ergebnisse</h3>
-        	<% if(uebungsattribute){ %>
-        			<% uebungsattribute.forEach(function(entry){ %>
-        				<li><%= entry.Bezeichnung %></li>
-        			<% }) %>
-        	<% } %>
-        </div>
-      </div>
-
+<!--START ‹bungen auflisten-->
       <div class="grid_6">
-
-        <div class="list-group">
-            <% for(let entry of uebung) { %>
-            	<li>
-            		<form action="/tracking" method="post">
-            			<li><button type="submit" name="uebung" value=<%= entry.UebungsID %>><%= entry.UebungsID %></button></li>
-					</form>
-				</li>
-            <% }; %>
-        </div>
-
+			<h4>√úbungen</h4>
+			<div class="list-group">
+				<% if(uebung){ %>
+					<% for(let entry of uebung) { %>
+						<li>
+							<form action="/tracking" method="post">
+								<li><button type="submit" name="uebung" value=<%= entry.UebungsID %>><%= entry.Bezeichnung %></button></li>
+							</form>
+						</li>
+					<% }; %>
+				<% }; %>
+			</div>
       </div>
+<!--END ‹bungen auflisten-->
+
+
+
+<!-- Ab hier Michael-->
+                <!-- Slider -->
+                <h1> Slider </h1>
+                <input type="range" min="0" max="100" value="50" step="2" onChange="sliderChange(this.value)" />
+                <p> Slider Value (0-100) = <a id="sliderStatus">50</a></p>
+
+                <!-- Counter -->
+                <h1> Counter </h1>
+                <! Counter -->
+                <button type="button" onClick="onClickMinus()">-</button>
+                <button type="button" onClick="onClickPlus()">+</button>
+                <input type="number" name="uebungsattribut" id="clicks" placeholder="0">
+
+                <!-- Timer -->
+                <h1> Timer </h1>
+                <p id="output">00:00:0</p>
+                <div id="controls">
+                    <button id="startPause" onclick="startPause()">Start</button>
+                    <button id="reset" onclick="reset()">Reset</button>
+                    <button id="lap" onclick="lap()">Lap</button>
+                </div>
+                <p id="laps"></p>
+
+<!-- Bis hier Michael-->
 
       <hr>
-
+<!--START Footer-->
       <div class="grid_6">
-        <p align="right">Kontakt | Impressum </p>
+      	<p align="right">Kontakt | Impressum </p>
       </div>
+<!--END Footer-->
 
     </div>
-    <!-- end .container_12 -->
+<!--END Wrapper-->
 
   </body>
 </html>
+
+

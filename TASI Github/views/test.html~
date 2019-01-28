@@ -1,0 +1,79 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Profil - TASI Trainingsassistent</title>
+
+		<link rel="stylesheet" type="text/css" href="./css/chart.css">
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+
+	</head>
+	
+	
+	<body>
+		<script>
+			var w = 500;
+			var h = 400;
+			var translation = 10;
+		
+			var data = [
+				{"valX": 1, "valY": 9},
+				{"valX": 2, "valY": 12},				
+				{"valX": 3, "valY": 10},				
+				{"valX": 4, "valY": 8},				
+				{"valX": 5, "valY": 12},
+				{"valX": 6, "valY": 14},
+				{"valX": 7, "valY": 11},				
+				{"valX": 8, "valY": 12},				
+				{"valX": 9, "valY": 15},				
+				{"valX": 10, "valY": 14}		
+			];
+										
+			var xScale = d3.scaleLinear()
+							.domain([0, data.length])
+							.range([0, w]);
+							
+			var yScale = d3.scaleLinear()
+							.domain([0, 15])
+							.range([h, 0]);
+			
+			var svg = d3.select('body')
+						.append('svg')
+						.attr('width', w)
+						.attr('height', h);
+						
+			var line = d3.line()
+							.x(function(d, i){
+								return xScale(i)+translation
+							})
+							.y(function(d){
+								return h-(yScale(d.valY))-translation
+							});
+						
+			var path = svg.append("path")
+						.attr("d", line(data))
+						.attr("fill", "none")
+						.attr("stroke", "#045FB4")
+						.attr("stroke-width", 2);
+						
+			var points = svg.selectAll("points")
+						.data(data)
+						.enter()
+						.append("g")
+						.attr("transform", function(d, i){return "translate("+(xScale(i)+translation)+","+ (h-yScale(d.valY)-translation)+")"});
+						
+			var circle = points.append("circle")
+						.attr("r", 10)
+						.style("fill", "#045FB4");
+						
+			var label = points.append("text")
+						.attr("transform", "translate(0, 5)")
+						.attr("font-family", "sans-serif")
+						.attr("font-size", "12px")
+						.attr("fill", "#FFFFFF")
+						.attr("text-anchor", "middle")
+						.text(function(d){return d.valY});
+
+		</script>
+	
+	</body>
+</html>

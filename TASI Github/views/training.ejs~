@@ -1,28 +1,28 @@
 <script>
   function activate(p1, p2) {
-    var ausguebung = document.getElementsByClassName("list-group-item active");
-    if (ausguebung.length > 0) {
-      ausguebung["0"].className = "list-group-item";
-    }
-    ausguebung = document.getElementById(p1);
-    ausguebung.className = ausguebung.className + " active";
-
-    //document.getElementById("uebungsbezeichnung").textContent = p3[p1].Bezeichnung;
-    
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if(this.readyState == 4 && this.status == 200) {
-        document.getElementById("einzelneuebung").innerHTML = this.responseText;
-      }
-    };
-    xhttp.open("GET", "/uebunganzeigen/" + p1 + "/" + p2, true);
-    xhttp.send();
+		var ausguebung = document.getElementsByClassName("list-group-item active");
+		if (ausguebung.length > 0) {
+		  ausguebung["0"].className = "list-group-item";
+		}
+		ausguebung = document.getElementById(p1);
+		ausguebung.className = ausguebung.className + " active";
+	
+		//document.getElementById("uebungsbezeichnung").textContent = p3[p1].Bezeichnung;
+		
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		  if(this.readyState == 4 && this.status == 200) {
+			document.getElementById("einzelneuebung").innerHTML = this.responseText;
+		  }
+		};
+		xhttp.open("GET", "/uebunganzeigen/" + p1 + "/" + p2, true);
+		xhttp.send();
   }
 
   function changeplan() {
-    var redir = document.getElementById("plans").options[document.getElementById("plans").selectedIndex].value;
-    var url = "/training/" + redir;
-    window.location.href = url;
+		var redir = document.getElementById("plans").options[document.getElementById("plans").selectedIndex].value;
+		var url = "/training/" + redir;
+		window.location.href = url;
   }
 </script>
 
@@ -41,42 +41,48 @@
 
 
   <body>
+<!--START Wrapper-->
     <div class="container_12">
 
+<!--START Menu-->
+	<div class="grid_12">
+		<a href="/profil.html"><img src="/Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
+		<div class="nav">
+			<ul class='menu'>
+				<li><a  href="/start">Profil</a></li>
+				<li><a  href="/uebungssammlung">√úbungen</a></li>
+				<li><a  href="/training">Training</a></li>
+				
+				<% if (roleid == 1) { %>
+					<li><a href="trainer.html">Trainerbereich</a>
+						<ul class='submenu'>
+							<li><a href="/createtrainingplan">Plan erstellen</a></li>
+							<li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
+						</ul>
+					</li>
+				<% } %>
+				
+				<% if(roleid == 2) { %>
+					<li><a href="trainerbereich.html">Spielerbereich</a></li>
+				<% } %>
+				
+				<li><a href="/logout">Ausloggen</a></li>
+			</ul>
+		</div>
+	</div>
+<!--END Menu-->
 
-
-
-      <!--Men√º-->
-      <div class="grid_12">
-          <a href="/profil.html"><img src="/Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
-          <div class="nav">
-        
-          <ul class='menu'>
-          <li><a  href="/start">Profil</a></li>
-          <li><a  href="/uebungssammlung">√úbungen</a></li>
-          <li><a  href="/training">Training</a></li>
-          <% if (roleid == 1) { %>
-            <li><a href="trainer.html">Trainerbereich</a>
-                <ul class='submenu'>
-                    <li><a href="/createtrainingplan">Plan erstellen</a></li>
-                    <li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
-                </ul>
-            </li>
-          <% } %>
-          <% if(roleid == 2) { %>
-            <li><a href="trainerbereich.html">Spielerbereich</a></li>
-          <% } %>
-          <li><a href="/logout">Ausloggen</a></li>
-        </ul></div>
-        </div>
-
+<!--START Headline-->
       <div class="grid_12" id="trainingsbezeichnung">
         <h1>Trainingspl√§ne</h1>
       </div>
+<!--END Headline-->
+
       <hr>
 
+<!--START Dropdown Trainingsplan-->
       <div class="grid_12">
-        <select id="plans" class="auswahl" name="Spieler" style="width: 365px" >
+        <select id="plans" class="auswahl" name="Spieler" style="width: 365px" onchange="changeplan()">
           <option disabled selected>Trainingsplan ausw√§hlen</option>
           <optgroup label="Bestehende Pl√§ne">
             <% for(entry of allplans) { %>
@@ -84,56 +90,56 @@
             <% } %>
           </optgroup>
         </select>
-        <button class="uebungenanfuegen" style="width:90px" onclick="changeplan()">Ausw√§hlen</button>
       </div><br></br>      
+<!--END Dropdown Trainingsplan-->
 
+<!--START ‹bungsbeschreibung-->
       <div id="einzelneuebung">
-        <div class="grid_6" id="uebungsbezeichnung">
-          <h4><%= uebung[0].Bezeichnung %></h4>
-        </div>
+			<div class="grid_6" id="uebungsbezeichnung">
+				  <h4><%= uebung[0].Bezeichnung %></h4>
+			</div>
 
-        <div class="grid_6">
-          <h4><%= trainingsbezeichnung %></h4>
-        </div>
+			<div class="grid_6">
+				  <h4><%= trainingsbezeichnung %></h4>
+			</div>
 
-        <div class="grid_6">
-          <iframe src="<%= uebung[0].Video %>" width="460" height="260" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe><br>
-
-
-          <div id="bereich">
-            <p>Kategorie: <%= uebung[0].Kategorie %> | Unterkategorie: <%= uebung[0].Unterkategorie %> | Niveau: <%= uebung[0].Niveau %> | Hilfsmittel: <%= uebung[0].Hilfsmittel %> | Dauer: <%= uebung[0].Dauer %></p>
-          </div>
-
-          <%= uebung[0].Beschreibung %>
-          <br>
-          <br>
-        </div>
+			<div class="grid_6">
+				  <iframe src="<%= uebung[0].Video %>" width="460" height="260" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe><br>
+		
+				  <div id="bereich">
+					<p>Kategorie: <%= uebung[0].Kategorie %> | Unterkategorie: <%= uebung[0].Unterkategorie %> | Niveau: <%= uebung[0].Niveau %> | Hilfsmittel: <%= uebung[0].Hilfsmittel %> | Dauer: <%= uebung[0].Dauer %></p>
+				  </div>
+		
+				  <%= uebung[0].Beschreibung %></br></br>
+			</div>
       </div>
+<!--END ‹bungsbeschreibung-->
 
+<!--START ‹bungen auflisten-->
       <div class="grid_6">
-
-        <div class="list-group">
-
-            <% var i = 1; %>
-            <% for(let entry of uebung) { %>
-              <a href="#" class="list-group-item" id="<%= entry.UebungsID %>" name="<%= i %>" onclick="activate(this.id, document.getElementById('trainingsbezeichnung').textContent)">
-                  <h4 class="list-group-item-heading"><%= entry.Bezeichnung %></h4>
-                  <p class="list-group-item-text">Unterkategorie: <%= entry.Kategorie %> |  Niveau: <%= entry.Niveau %> | Hilfsmittel: <%= entry.Hilfsmittel %> | Dauer: <%= entry.Dauer %></p>
-              </a>
-              <% i++; %>
-            <% }; %>
-        </div>
-
+			<div class="list-group">
+				<% var i = 1; %>
+				<% for(let entry of uebung) { %>
+				  <a href="#" class="list-group-item" id="<%= entry.UebungsID %>" name="<%= i %>" onclick="activate(this.id, document.getElementById('trainingsbezeichnung').textContent)">
+					  <h4 class="list-group-item-heading"><%= entry.Bezeichnung %></h4>
+					  <p class="list-group-item-text">Kategorie: <%= entry.Kategorie %> |  Niveau: <%= entry.Niveau %> | Hilfsmittel: <%= entry.Hilfsmittel %> | Dauer: <%= entry.Dauer %></p>
+				  </a>
+				  <% i++; %>
+				<% }; %>
+			</div>
       </div>
+<!--END ‹bungen auflisten-->
 
       <hr>
-
+      
+<!--START Footer-->
       <div class="grid_6">
         <p align="right">Kontakt | Impressum </p>
       </div>
+<!--END Footer-->
 
     </div>
-    <!-- end .container_12 -->
+<!--END Wrapper-->
 
   </body>
 </html>
