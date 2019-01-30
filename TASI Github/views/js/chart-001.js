@@ -1,4 +1,4 @@
-function chart(data){
+function chart(data, pos){
 
 var w = 500;
 var h = 400;
@@ -17,7 +17,7 @@ var yScale = d3.scaleLinear()
 				.domain([0, max])
 				.range([h, translation]);
 
-var svg = d3.select("body")
+var svg = d3.select(pos)
 			.append("svg")
 			.attr("width", w)
 			.attr("height", h);
