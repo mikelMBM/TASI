@@ -31,6 +31,19 @@
 
 	}
   }
+
+	function achievements(NutzerID){
+		$.ajax({
+			url: "/overview",
+			method: "POST",
+			data: { NutzerID: NutzerID },
+			dataType: "JSON",
+			success: function(data) {
+				uebungenBySpieler(data);
+				document.getElementById("dropdownUebungen").style.visibility = "visible";
+			}
+		});
+	};
   
   
 </script>
@@ -90,12 +103,104 @@
 <!--END Menu--> 
 
 <!--START Headline-->
-		  <div class="grid_12" id="werte">
+		  <div class="grid_12" id="headline">
 			<h1>Überblick</h1>
 		  </div>      
 <!--END Headline-->
 
+<!--START Dropdown �bungsauswahl-->
+		<div class="grid_6" id="dropdownUebungen" style="visibility:hidden">
+			<select id="uebungen" class="auswahl" name="NutzerID" style="width: 365px" onchange="showWerte(this.value)" >
+				<option disabled value="none" selected>Übung auswählen</option>		
+			</select>
+		</div></br></br>
+<!--END Dropdown �bungsauswahl-->
+
+<!--START Dropdown Spielerauswahl-->
+		<div class="grid_6">
+			<form action="/overview" method="post">
+				<select id="spieler" class="auswahl" name="NutzerID" style="width: 365px" onchange="achievements(this.value)" >
+					<option disabled selected>Spieler auswählen</option>
+					<% if(spieler) { %>
+						<optgroup label="Spieler">
+							<% spieler.forEach(function(entry){ %>
+								<% if(entry.hasOwnProperty("Vorname") && entry.hasOwnProperty("Nachname")){ %>
+									<option value='<%= entry.NutzerID %>'><%= entry.Vorname + " " + entry.Nachname %></option>			
+								<% } %>
+							<% }); %>
+						</optgroup>
+					<% } %>
+				</select>
+			</form>
+		</div></br> 
+<!--END Dropdown Spielerauswahl-->  
+
+<script>
+var werte = [];
+var uebungenArr = [];
+
+function uebungenBySpieler(data){
+	document.getElementById("chart").innerHTML = "";
+	werte = data;
+	uebungenArr = [];
+	data.forEach(function(uebung){
+		if (!uebungenArr.some(e => e.UebungsID === uebung.UebungsID)) {
+			var obj = {
+				Bezeichnung: uebung.Bezeichnung,
+				UebungsID: uebung.UebungsID
+			}
+			uebungenArr.push(obj);
+		}
+	});
+	uebungenAnzeigen(uebungenArr);
+};
+
+function uebungenAnzeigen(uebungenArr){
+	document.getElementById("uebungen").innerHTML = "";
+	var option = document.createElement("option");
+	option.value = "none";
+	option.text = "Übung auswählen";
+	option.disabled = true;
+	document.getElementById("uebungen").appendChild(option);
 	
+	uebungenArr.forEach(function(uebung){
+		var option = document.createElement("option");
+		option.text = uebung.Bezeichnung;
+		option.value = uebung.UebungsID;
+		document.getElementById("uebungen").appendChild(option);
+	});
+	document.getElementById("uebungen").value = "none";
+	document.getElementById("headlineChart").innerHTML = "";
+};
+
+function showWerte(UebungsID){
+	document.getElementById("chart").innerHTML = "";
+	var werteArr = [];
+	var i = 1;
+	
+	werte.forEach(function(wert){
+		if(wert.UebungsID == UebungsID){
+			var Datum = wert.Datum.split("T")[0];
+			var WertObj = {valX: i, valY: wert.Wert, Datum: Datum};
+			werteArr.push(WertObj);
+			i++;
+		};
+	});
+	
+	uebungenArr.forEach(function(entry){
+		if(entry.UebungsID == UebungsID){
+			document.getElementById("headlineChart").innerHTML = "<h4>" + entry.Bezeichnung + "</h4>";
+		};
+	});
+	chart(werteArr, "#chart");
+};
+</script>
+
+<!--START Chart-->
+		<div class="grid_12" id="headlineChart" style="margin-top: 20px"></div>
+		<div class="grid_12" id="chart" style="margin-top: 10px"></div>
+<!--END Chart-->	
+
 
 <!--START Footer-->	
 	<hr>
