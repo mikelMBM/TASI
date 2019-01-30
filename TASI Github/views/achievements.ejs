@@ -30,8 +30,7 @@
 	if((!(char > 47 && char < 58) || char == 46)){
 
 	}
-  }
-  
+  } 
   
 </script>
 
@@ -191,7 +190,8 @@
 <!--END Werte als Eingabefelder anzeigen-->
 
 <!--START Chart-->
-	<div class="grid_6">
+	<div class="grid_12" id="headlineChart" style="margin-top: 20px"></div>
+	<div class="grid_12" id="chart" style="margin-top: 10px"></div>
 		<% if(achievements){ %>	
 			<script>
 				var data = [];
@@ -260,7 +260,7 @@
 				<% } %>
 			<!--END Attribut StreckeMeter-->
 			<!--START Funktion aus der importierten JS zur Ausgabe des Charts aufrufen-->
-				chart(data);
+				chart(data, "#chart");
 			<!--END Funktion aus der importierten JS zur Ausgabe des Charts aufrufen-->
 			</script>
 		<% } %>		
