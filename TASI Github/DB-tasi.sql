@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 25. Jan 2019 um 20:48
+-- Erstellungszeit: 02. Feb 2019 um 12:40
 -- Server-Version: 10.1.36-MariaDB
 -- PHP-Version: 7.2.11
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `tasi`
+-- Datenbank: `db-tasi`
 --
 
 -- --------------------------------------------------------
@@ -42,23 +42,41 @@ CREATE TABLE `achievements` (
 --
 
 INSERT INTO `achievements` (`AchievementID`, `UebungsID`, `UebungsattributID`, `NutzerID`, `Datum`, `Wert`) VALUES
-(20, 1300, 3, 1, '2019-01-25 13:29:08', '50'),
-(21, 200, 1, 1, '2019-01-25 13:29:19', '5.3'),
-(22, 1300, 3, 1, '2019-01-25 13:29:27', '40'),
-(23, 1300, 3, 1, '2019-01-25 13:29:32', '60'),
-(24, 1300, 3, 1, '2019-01-25 13:29:37', '55'),
-(25, 1300, 3, 1, '2019-01-25 13:29:42', '80'),
-(26, 200, 1, 1, '2019-01-25 13:29:49', '21'),
-(27, 200, 1, 1, '2019-01-25 13:29:53', '19'),
-(28, 200, 1, 1, '2019-01-25 13:29:57', '23'),
-(29, 200, 1, 1, '2019-01-25 13:30:03', '22'),
-(30, 200, 1, 1, '2019-01-25 13:30:09', '10'),
-(31, 800, 2, 1, '2019-01-25 14:00:30', '4'),
-(32, 800, 2, 1, '2019-01-25 14:00:41', '1'),
-(33, 800, 2, 1, '2019-01-25 14:00:49', '4'),
-(34, 800, 2, 1, '2019-01-25 14:00:55', '5'),
-(35, 800, 2, 1, '2019-01-25 14:00:59', '5'),
-(37, 1300, 3, 1, '2019-01-25 14:07:33', '11.2');
+(1, 200, 1, 1, '2019-01-21 20:36:11', '119'),
+(2, 200, 4, 1, '2019-01-21 20:36:11', '89'),
+(3, 100, 3, 1, '2019-01-21 20:36:18', '132'),
+(4, 200, 1, 1, '2019-01-22 15:21:40', '55'),
+(5, 200, 4, 1, '2019-01-22 15:21:40', '6'),
+(6, 100, 3, 1, '2019-01-22 15:21:47', '80'),
+(7, 100, 3, 1, '2019-01-22 15:21:53', '4'),
+(8, 200, 1, 1, '2019-01-23 17:16:31', '15'),
+(9, 200, 4, 1, '2019-01-23 17:16:31', '4'),
+(10, 200, 1, 1, '2019-01-23 17:16:41', '19'),
+(11, 200, 4, 1, '2019-01-23 17:16:41', '6'),
+(12, 200, 1, 1, '2019-01-23 17:16:49', '50'),
+(13, 200, 4, 1, '2019-01-23 17:16:49', '8'),
+(14, 200, 1, 1, '2019-01-24 01:25:02', '77'),
+(15, 200, 4, 1, '2019-01-24 01:25:02', '6'),
+(16, 200, 1, 1, '2019-01-24 01:25:11', '42'),
+(17, 200, 4, 1, '2019-01-24 01:25:11', '8'),
+(18, 200, 1, 1, '2019-01-24 01:25:20', '63'),
+(19, 200, 4, 1, '2019-01-24 01:25:20', '12'),
+(20, 300, 1, 7, '2019-01-08 18:00:00', '4'),
+(21, 300, 1, 7, '2019-01-10 18:00:00', '5'),
+(22, 300, 1, 7, '2019-01-15 18:00:00', '5'),
+(23, 300, 1, 7, '2019-01-17 18:00:00', '8'),
+(24, 300, 1, 7, '2019-01-22 18:00:00', '11'),
+(25, 300, 1, 7, '2019-01-24 18:00:00', '15'),
+(26, 300, 1, 7, '2019-01-29 18:00:00', '12'),
+(27, 300, 1, 7, '2019-01-31 18:00:00', '20'),
+(28, 600, 2, 7, '2019-01-08 18:00:00', '1'),
+(29, 600, 2, 7, '2019-01-10 18:00:00', '1'),
+(30, 600, 2, 7, '2019-01-15 18:00:00', '2'),
+(31, 600, 2, 7, '2019-01-17 18:00:00', '1'),
+(32, 600, 2, 7, '2019-01-22 18:00:00', '3'),
+(33, 600, 2, 7, '2019-01-24 18:00:00', '2'),
+(34, 600, 2, 7, '2019-01-29 18:00:00', '3'),
+(35, 600, 2, 7, '2019-01-31 18:00:00', '3');
 
 -- --------------------------------------------------------
 
@@ -218,7 +236,8 @@ CREATE TABLE `mannschaftszuweisung` (
 
 INSERT INTO `mannschaftszuweisung` (`MannschaftsID`, `SpielerID`) VALUES
 (2, 2),
-(2, 3);
+(2, 3),
+(2, 7);
 
 -- --------------------------------------------------------
 
@@ -261,8 +280,7 @@ CREATE TABLE `training` (
 INSERT INTO `training` (`TrainingsID`, `Bezeichnung`, `Zeitraum`, `TrainerID`, `beschreibung`, `MannschaftsID`) VALUES
 (1, 'Allgemein Damen 1', '2018-01-17 05:23:00', 1, 'Dieses Training ist gut für die Oberschenkelmuskulatur und unterstützt auch den Torwart beim Nachtreten bei zu guten Gegnern', NULL),
 (2, 'Allgemein Herren 2', '2018-01-19 00:00:00', 1, 'Training der Allgemeinen Rumpfmuskulatur. Damit unser Spielmacher endlich seine Wampe verliert.', NULL),
-(17, 'testen', '0000-00-00 00:00:00', 1, 'adsfafgasdfasdf', 1),
-(18, '', '0000-00-00 00:00:00', 0, NULL, NULL);
+(3, 'Aufbau Beinmuskulatur', '2019-02-02 10:28:41', 1, 'Dieses Training dient zum Aufbau der Beinmuskulatur. Insbesondere geeignet für Spieler, die aufgrund einer Verletzung längerer Zeit aussetzen mussten.', NULL);
 
 -- --------------------------------------------------------
 
@@ -282,7 +300,7 @@ CREATE TABLE `trainingszuweisung` (
 INSERT INTO `trainingszuweisung` (`TrainingsID`, `SpielerID`) VALUES
 (1, 2),
 (2, 3),
-(18, 3);
+(3, 7);
 
 -- --------------------------------------------------------
 
@@ -405,15 +423,13 @@ INSERT INTO `uebungszuweisung` (`UebungsID`, `TrainingsID`) VALUES
 (100, 1),
 (200, 1),
 (300, 1),
-(102, 17),
-(400, 17),
 (500, 2),
 (1501, 2),
 (800, 2),
-(200, 17),
-(1400, 18),
-(400, 18),
-(1300, 1);
+(300, 3),
+(600, 3),
+(1500, 3),
+(1700, 3);
 
 -- --------------------------------------------------------
 
@@ -448,7 +464,8 @@ INSERT INTO `user` (`NutzerID`, `vorname`, `nachname`, `email`, `username`, `pas
 (3, 'Corinna', 'Blersch', 'keineahnung@live.com', 'Cori', 'blondi', 2, 'Bergstr 21', 'Baienfurt', '07510000', '0172345678', 'profilbilder/profilbild_spieler01.jpg', 'LA', '11.11.1911'),
 (4, 'Michael', 'Ohnename', 'm.o@web.de', 'michi', 'michi', 2, 'Hungerstr. 17', 'Baindt', '07516564316', '0172656945', 'profilbilder/bild_mo.jpg', 'RA', '23.01.1990'),
 (5, 'Stephan', 'Burkowski', 'burksteph@googlemail.com', 'sb1234', 'kardoffelsalad', 1, NULL, NULL, NULL, NULL, '', 'K', NULL),
-(6, 'Gesa', 'Langhammer', 'asdfasdf@asdf.de', 'gesi', 'abcd', 2, 'Straßenstr. 3', 'Stadt', NULL, NULL, '', 'K', '31.34.1990');
+(6, 'Gesa', 'Langhammer', 'asdfasdf@asdf.de', 'gesi', 'abcd', 2, 'Straßenstr. 3', 'Stadt', NULL, NULL, '', 'K', '31.34.1990'),
+(7, 'Anika', 'Abschluss', 'anikaszenario@schmitt.de', 'anika', 'spetzle', 2, 'Spielstraße 16', 'Handballstadt', '01234-5678910', '01098-7654321', '', 'LA', '05.02.2001');
 
 --
 -- Indizes der exportierten Tabellen
@@ -540,7 +557,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `achievements`
 --
 ALTER TABLE `achievements`
-  MODIFY `AchievementID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `AchievementID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT für Tabelle `hilfsmittel`
