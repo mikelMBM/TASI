@@ -1,0 +1,57 @@
+for(entry of result) {
+    uebung.push(entry);
+
+    squery =    "SELECT hilfsmittel.Bezeichnung " +
+                "FROM hilfsmittel, hilfsmittelzuweisung " +
+                "WHERE hilfsmittel.HilfsmittelID = hilfsmittelzuweisung.HilfsmittelID " +
+                "AND hilfsmittelzuweisung.uebungsID = ?";
+
+    connection.query(squery, entry.UebungsID, function(err, result, fields) {
+        uebung[e]["Hilfsmittel"]="";
+        if(result.length == 1) {
+            uebung[e]["Hilfsmittel"] = result[0].Bezeichnung;
+        } else if (result.length == 0) {
+            uebung[e]["Hilfsmittel"] = "ohne Hilfsmittel";
+        } else {
+            var i = 0;
+            while(i<result.length) {
+                uebung[e]["Hilfsmittel"] += result[i].Bezeichnung + "; ";
+                i++;
+            }
+        }
+        e++;
+        if(e == length) {
+            if(req.session.roleid == 1) {
+                squery = "SELECT TrainingsID, Bezeichnung FROM training WHERE TrainerID = ?";
+                connection.query(squery, req.session.usid, function(err, result) {
+                    for(entry of result) {
+                        allplans.push(entry);
+                    }
+                    res.render("training", {
+                        trainingsbezeichnung: trainingsbezeichnung,
+                        uebung: uebung ,
+                        allplans: allplans
+                    });
+                });
+            }
+
+            } else if(req.session.roleid == 2) {
+                squery =    "SELECT training.TrainingsID, training.Bezeichnung FROM training, trainingszuweisung " + 
+                            "WHERE training.TrainingsID = trainingszuweisung.TrainingsID AND SpielerID = ?";
+
+                connection.query(squery, req.session.usid, function(err, result) {
+                    for(entry of result) {
+                        allplans.push(entry);
+                    }
+                    res.render("training", {
+                        trainingsbezeichnung: trainingsbezeichnung,
+                        uebung: uebung,
+                        allplans: allplans
+                    });
+                });
+            }
+        }
+
+    );
+
+}
