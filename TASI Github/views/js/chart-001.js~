@@ -1,36 +1,42 @@
-function chart(data){
+function percent(per, of){
+		console.log((of/100)*per);
+	return (of/100)*per;
+};
 
-var w = 500;
-var h = 400;
-var translationX = 20;
+function chart(data, pos, w, h){
+
+var translationX = 30;
 var translationY = 40;
 
-var translation = 50;
+var translation = 70;
 
 var max = d3.max(data, function(d) { return + d.valY;} );
-						
+
 var xScale = d3.scaleLinear()
 				.domain([0, data.length])
 				.range([translation, w]);
 				
 var yScale = d3.scaleLinear()
-				.domain([0, max])
+				.domain([0, max + percent(50, max)])
 				.range([h, translation]);
 
-var svg = d3.select("body")
+var svg = d3.select(pos)
 			.append("svg")
 			.attr("width", w)
 			.attr("height", h);
 			
 var container = svg.append("g")
 			
-var xAxis = d3.axisBottom(xScale)			  
+var xAxis = d3.axisBottom(xScale)
+			.tickFormat("")
+			.tickSize(0);
+			
 var yAxis = d3.axisLeft(yScale)
 
 var appendX = container.append("g")
 			  .attr("transform", "translate("+ (-40) + "," + (h-40) + ")")
 			  .classed("xaxis", true)
-			  .call(xAxis)
+			  .call(xAxis);
 			  
 var appendY = container.append("g")
 			  .attr("transform", "translate("+ translationX + "," + (-translationY) + ")")
@@ -65,7 +71,7 @@ var points = container.selectAll("points")
 var circle = points.append("circle")
 			.attr("r", 10)
 			.style("fill", "#045FB4");
-			
+
 var label = points.append("text")
 			.attr("transform", "translate(0, 5)")
 			.attr("font-family", "sans-serif")
@@ -74,4 +80,16 @@ var label = points.append("text")
 			.attr("text-anchor", "middle")
 			.text(function(d){return d.valY});
 			
-}
+var datum = points.append("text")
+			.attr("transform", "translate(0, -15)")
+			.attr("font-family", "sans-serif")
+			.attr("font-size", "12px")
+			.attr("fill", "#045FB4")
+			.attr("text-anchor", "middle")
+			.text(function(d){return d.Datum});		
+};
+
+
+
+
+

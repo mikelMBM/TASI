@@ -1,0 +1,26 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>TASI Beta</title>
+  </head>
+
+
+  <body>
+  <script>
+  	function display(val){
+  		var output = document.getElementById("output");
+  		output.innerHTML = "<h4>" + val + "</h4>";
+  	};
+  	
+  </script>
+  
+	Dein Ergebnis:<br>
+	<input type="number" id="ergebnis" name="ergebnis" min="1" max="999" step="1">
+	<button type="button" onclick="display(document.getElementById('ergebnis').value)">Wert eintragen</button> 
+	
+	<div id="output"></div>
+	
+  </body>
+</html>
+
+

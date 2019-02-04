@@ -21,57 +21,39 @@
 
 
   <body>
+<!--START Wrapper-->
     <div class="container_12">
 
-      <!--<a href="/profil.html"><img src="Bilder/logo_small.png" width="150" alt="TasiLogo" /></a>-->
-
-
-  <!--Menü-->
-  <div class="grid_12">
-    <a href="/profil.html"><img src="Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
-    <div class="nav">
-  
-    <ul class='menu'>
-    <li><a  href="/start">Profil</a></li>
-    <li><a  href="/uebungssammlung">Übungen</a></li>
-    <li><a  href="/training">Training</a></li>
-    <% if (roleid == 1) { %>
-      <li><a href="trainer.html">Trainerbereich</a>
-          <ul class='submenu'>
-              <li><a href="/createtrainingplan">Plan erstellen</a></li>
-              <li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
-          </ul>
-      </li>
-    <% } %>
-    <% if(roleid == 2) { %>
-      <li><a href="trainerbereich.html">Spielerbereich</a></li>
-    <% } %>
-    <li><a href="/logout">Ausloggen</a></li>
-  </ul></div>
-  </div>
-      <!--<div class="grid_12">
-        <nav>
-          <ul>
-            <li><a href="/start">Profil</a></li>
-            <li><a href="/uebungssammlung">&Uuml;bungen</a></li>
-            <li><a href="/training">Training</a></li>
-            <% if(roleid == 1) { %>
-            <li><a href="trainerbereich.html">Trainerbereich</a>
-              <ul>
-                <li><a href="/createtrainingplan">Trainingsplan erstellen</a></li>
-                <li><a href="nutzerverwaltung.html">Nutzerverwaltung</a></li>
-              </ul>
-            </li>
-            <% } %>
-            <% if(roleid == 2) { %>
-              <li><a href="trainerbereich.html">Spielerbereich</a></li>
-              <% } %>
-            <li><a href="/logout">Ausloggen</a></li>
-          </ul>
-        </nav>
-      </div>-->
-
-  <!--Menü Ende -->
+<!--START Menu-->
+	<div class="grid_12">
+		<a href="/profil.html"><img src="/Bilder/logo_small.png" width="100" alt="TasiLogo" style="margin:5px"/></a>
+		<div class="nav">
+			<ul class='menu'>
+				<li><a  href="/start">Profil</a></li>
+				<li><a  href="/uebungssammlung">Übungen</a></li>
+				<li><a href="/training">Trainingspläne</a></li>
+				<% if (roleid == 1) { %>
+					<li><a href="/trainer">Trainerbereich</a>
+						<ul class='submenu'>
+							<li><a href="/createtrainingplan">Plan erstellen</a></li>
+							<li><a href="/overview">Spielerauswertung</a></li>
+							<li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
+						</ul>
+					</li>
+				<% } %>
+				<% if (roleid == 2) { %>
+					<li><a href="/spieler">Spielerbereich</a>
+						<ul class='submenu'>
+							<li><a href="/tracking">Meine Werte eintragen</a></li>
+							<li><a href="/achievements">Meine Werte anzeigen</a></li>
+						</ul>
+					</li>
+				<% } %>
+				<li><a href="/logout">Ausloggen</a></li>
+			</ul>
+		</div>
+	</div>
+<!--END Menu--> 
 
       <div class="grid_6">
         <br>
@@ -139,13 +121,15 @@
       </div>
 
       <hr>
-
+      
+<!--START Footer-->
       <div class="grid_6">
         <p align="right">Kontakt | Impressum </p>
       </div>
+<!--END Footer-->
 
     </div>
-  <!-- end .container_12 -->
+<!--END Wrapper-->
 
   </body>
 </html>

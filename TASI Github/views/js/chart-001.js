@@ -1,20 +1,44 @@
-function chart(data, pos){
+function percent(per, of){
+	return (of/100)*per;
+};
 
-var w = 500;
-var h = 400;
-var translationX = 20;
+function averageMannschaft(data, average){
+	var dataMannschaft = [];
+	for(i=0; i<data.length; i++){
+		var obj = {	valX: data[i].valX,
+					valY: average
+		}
+		dataMannschaft.push(obj);		
+	}
+	return dataMannschaft;
+};
+
+function labelF(MS){
+	averageLabel = "";
+	if(MS == "M"){
+		averageLabel = "Mannschaftsdurchschnitt";
+		return averageLabel;
+	}else if(MS == "S"){
+		averageLabel = "Durchschnitt";
+		return averageLabel;
+	};
+};
+
+function chart(data, average, pos, w, h, MS){
+
+var translationX = 30;
 var translationY = 40;
 
-var translation = 50;
+var translation = 70;
 
 var max = d3.max(data, function(d) { return + d.valY;} );
-						
+
 var xScale = d3.scaleLinear()
 				.domain([0, data.length])
 				.range([translation, w]);
 				
 var yScale = d3.scaleLinear()
-				.domain([0, max])
+				.domain([0, max + percent(50, max)])
 				.range([h, translation]);
 
 var svg = d3.select(pos)
@@ -24,13 +48,16 @@ var svg = d3.select(pos)
 			
 var container = svg.append("g")
 			
-var xAxis = d3.axisBottom(xScale)			  
+var xAxis = d3.axisBottom(xScale)
+			.tickFormat("")
+			.tickSize(0);
+			
 var yAxis = d3.axisLeft(yScale)
 
 var appendX = container.append("g")
 			  .attr("transform", "translate("+ (-40) + "," + (h-40) + ")")
 			  .classed("xaxis", true)
-			  .call(xAxis)
+			  .call(xAxis);
 			  
 var appendY = container.append("g")
 			  .attr("transform", "translate("+ translationX + "," + (-translationY) + ")")
@@ -42,19 +69,42 @@ d3.selectAll(".domain")
 			.attr("stroke", "#045FB4")
 			.attr("stroke-width", 1);
 			
-var line = d3.line()
+var lineSpieler = d3.line()
 				.x(function(d, i){
 					return xScale(i)+translationX
 				})
 				.y(function(d){
 					return (yScale(d.valY))-translationY
 				});
+				
+var lineMannschaft = d3.line()
+				.x(function(d, i){
+					return xScale(i)+translationX
+				})
+				.y(function(d){
+					return (yScale(d.valY))-translationY
+				});			
 			
-var path = container.append("path")
-			.attr("d", line(data))
+var pathSpieler = container.append("path")
+			.attr("d", lineSpieler(data))
 			.attr("fill", "none")
 			.attr("stroke", "#045FB4")
 			.attr("stroke-width", 2);
+			
+var pathMannschaft = container.append("path")
+			.attr("d", lineMannschaft(averageMannschaft(data, average)))
+			.attr("fill", "none")
+			.attr("stroke", "#FF0000")
+			.attr("stroke-width", 2);
+			
+var labelAverage = container.append("text")
+			.attr("transform", "translate(" + (w/2) + ", " + (yScale(average)-50) + ")")
+			.attr("font-family", "sans-serif")
+			.attr("font-size", "12px")
+			.attr("fill", "#FF0000")
+			.attr("text-anchor", "middle")
+			.text(labelF(MS));
+			
 			
 var points = container.selectAll("points")
 			.data(data)
@@ -72,7 +122,7 @@ var label = points.append("text")
 			.attr("font-size", "12px")
 			.attr("fill", "#FFFFFF")
 			.attr("text-anchor", "middle")
-			.text(function(d){return d.valY});
+			.text(function(d){return d.valY});			
 			
 var datum = points.append("text")
 			.attr("transform", "translate(0, -15)")
@@ -80,11 +130,10 @@ var datum = points.append("text")
 			.attr("font-size", "12px")
 			.attr("fill", "#045FB4")
 			.attr("text-anchor", "middle")
-			.text(function(d){return d.Datum});
+			.text(function(d){return d.Datum});		
 			
 			
-			
-}
+};
 
 
 

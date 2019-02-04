@@ -32,6 +32,17 @@
 	}
   } 
   
+  	function switcher(){
+		var status = document.getElementById("btnSwitch").value;
+		if(status == "off"){
+			document.getElementById("bearbeiten").style.visibility = "visible";
+			document.getElementById("btnSwitch").value = "on";
+		}else{
+			document.getElementById("bearbeiten").style.visibility = "hidden";
+			document.getElementById("btnSwitch").value = "off";
+		}
+	}
+  
 </script>
 
 <html lang="en">
@@ -54,7 +65,7 @@
 
 
   <body>
-<!--START .container_12-->
+<!--START Wrapper-->
     <div class="container_12">
 
 <!--START Menu-->
@@ -64,9 +75,8 @@
 			<ul class='menu'>
 				<li><a  href="/start">Profil</a></li>
 				<li><a  href="/uebungssammlung">√úbungen</a></li>
-				<li><a href="/training">Trainingspl√§ne</a></li>
 				<% if (roleid == 1) { %>
-					<li><a href="/trainer">Trainerbereich</a>
+					<li><a>Trainerbereich</a>
 						<ul class='submenu'>
 							<li><a href="/createtrainingplan">Plan erstellen</a></li>
 							<li><a href="/overview">Spielerauswertung</a></li>
@@ -75,9 +85,9 @@
 					</li>
 				<% } %>
 				<% if (roleid == 2) { %>
-					<li><a href="/spieler">Spielerbereich</a>
+					<li><a>Mein Training</a>
 						<ul class='submenu'>
-							<li><a href="/tracking">Meine Werte eintragen</a></li>
+							<li><a href="/training">Trainingspl√§ne</a></li>
 							<li><a href="/achievements">Meine Werte anzeigen</a></li>
 						</ul>
 					</li>
@@ -110,23 +120,125 @@
 					  </optgroup>
 			</select>
 		</form>
-	</div> 
+	</div>
 <!-- END Auswahlmen¸ f¸r ‹bungen-->	
 
+<!--START Headline Uebung-->
+	  <div class="grid_12" id="uebungsbezeichnung" style="margin-top:20px">
+		<% if(selectedUebung){ %>
+			<ul>
+				<li style="display:inline-block; margin-right:10px"><h4><%= selectedUebung[0].Bezeichnung %></h4></li>
+				<li style="display:inline-block; margin-right:10px"><button class="btn" id="btnSwitch" type="button" value="off" onclick="switcher()">Werte bearbeiten</button></li>
+			</ul>	
+		<% } %>
+	  </div>  
+<!--END Headline Uebung-->
 
-<!--START Werte als Eingabefelder anzeigen-->
-	<div class="grid_6">
-		<h3>Ergebnisse</h3><br>		
+<!--START Chart-->
+	<div class="grid_6" id="chart" style="margin-top: 0px; float:left"></div>
+		<% if(achievements){ %>	
+			<script>
+				var data = [];
+				var average = 0;
+			<!--START Attribut Wiederholungen-->
+				<% if(achievements.hasOwnProperty('Wiederholungen')){ %>
+					var i = 1;
+					var total = 0;
+					<% achievements.Wiederholungen.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
+							data.push(WertObj);
+							total += parseFloat(<%= entry.Wert %>);
+							i++;
+						<% } %>
+					<% }) %>
+					average = total/(i-1);
+				<% } %>
+			<!--END Attribut Wiederholungen-->
+			
+			<!--START Attribut Evaluation-->
+				<% if(achievements.hasOwnProperty('Evaluation')){ %>
+					var i = 1;
+					var total = 0;
+					<% achievements.Evaluation.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
+							data.push(WertObj);
+							total += parseFloat(<%= entry.Wert %>);
+							i++;
+						<% } %>
+					<% }) %>
+					average = total/(i-1);
+				<% } %>
+			<!--END Attribut Evaluation-->	
+			
+			<!--START Attribut DauerSec-->
+				<% if(achievements.hasOwnProperty('DauerSec')){ %>
+					var i = 1;
+					var total = 0;
+					<% achievements.DauerSec.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
+							data.push(WertObj);
+							total += parseFloat(<%= entry.Wert %>);
+							i++;
+						<% } %>
+					<% }) %>
+					average = total/(i-1);
+				<% } %>
+			<!--END Attribut DauerSec-->	
+			
+			<!--START Attribut DauerMin-->
+				<% if(achievements.hasOwnProperty('DauerMin')){ %>
+					var i = 1;
+					var total = 0;
+					<% achievements.DauerMin.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
+							data.push(WertObj);
+							total += parseFloat(<%= entry.Wert %>);							
+							i++;
+						<% } %>
+					<% }) %>
+					average = total/(i-1);
+				<% } %>
+			<!--END Attribut DauerMin-->
 
+			<!--START Attribut StreckeMeter-->
+				<% if(achievements.hasOwnProperty('StreckeMeter')){ %>
+					var i = 1;
+					var total = 0;
+					<% achievements.StreckeMeter.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
+							data.push(WertObj);
+							total += parseFloat(<%= entry.Wert %>);	
+							i++;
+						<% } %>
+					<% }) %>
+					average = total/(i-1);
+				<% } %>
+			<!--END Attribut StreckeMeter-->
+			<!--START Funktion aus der importierten JS zur Ausgabe des Charts aufrufen-->
+				chart(data, average, "#chart", 700, 500, "S");
+			<!--END Funktion aus der importierten JS zur Ausgabe des Charts aufrufen-->
+			</script>
+		<% } %>		
+<!--END Chart-->
+
+<!--START Werte bearbeiten-->
+	<div class="grid_2" id="bearbeiten" style="visibility:hidden">
 		<% if(achievements){ %>
 				<% if(achievements.hasOwnProperty('Wiederholungen')){ %>
 					Wiederholungen:
 					<% achievements.Wiederholungen.forEach(function(entry){ %>
 						<% if(entry.hasOwnProperty('Wert')){ %>
 							<form action="/achievements" method="post">
-								<input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
-								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
-								<input class="btn btn-primary" type="submit" value="ok"></br></br>
+								<ul>
+									<li style="display:inline-table; width:40%"><input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></li>
+									<li style="display:inline-table"><input type="hidden" name="achievementChange" value= <%= entry.ID %>></li>
+									<li style="display:inline-table"><input class="btn btn-primary" type="submit" value="ok"></br></br></li>
+								</ul>
 							</form>
 						<% } %>
 					<% }) %></br>
@@ -137,9 +249,11 @@
 					<% achievements.Evaluation.forEach(function(entry){ %>
 						<% if(entry.hasOwnProperty('Wert')){ %>
 							<form action="/achievements" method="post">
-								<input type="number" step="1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
-								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
-								<input class="btn btn-primary" type="submit" value="ok"></br></br>
+								<ul>
+									<li style="display:inline-table"><input type="number" step="1" name="achievementWert" value= <%= entry.Wert %>></li>
+									<li style="display:inline-table"><input type="hidden" name="achievementChange" value= <%= entry.ID %>></li>
+									<li style="display:inline-table"><input class="btn btn-primary" type="submit" value="ok"></br></br></li>
+								</ul>
 							</form>
 						<% } %>
 					<% }) %></br>
@@ -150,9 +264,11 @@
 					<% achievements.DauerSec.forEach(function(entry){ %>
 						<% if(entry.hasOwnProperty('Wert')){ %>
 							<form action="/achievements" method="post">
-								<input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
-								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
-								<input class="btn btn-primary" type="submit" value="ok"></br></br>
+								<ul>
+									<li style="display:inline-table"><input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></li>
+									<li style="display:inline-table"><input type="hidden" name="achievementChange" value= <%= entry.ID %>></li>
+									<li style="display:inline-table"><input class="btn btn-primary" type="submit" value="ok"></br></br></li>
+								</ul>
 							</form>
 						<% } %>
 					<% }) %></br>
@@ -163,9 +279,11 @@
 					<% achievements.DauerMin.forEach(function(entry){ %>
 						<% if(entry.hasOwnProperty('Wert')){ %>
 							<form action="/achievements" method="post">
-								<input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
-								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
-								<input class="btn btn-primary" type="submit" value="ok"></br></br>
+								<ul>
+									<li style="display:inline-table"><input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></li>
+									<li style="display:inline-table"><input type="hidden" name="achievementChange" value= <%= entry.ID %>></li>
+									<li style="display:inline-table"><input class="btn btn-primary" type="submit" value="ok"></br></br></li>
+								</ul>
 							</form>
 						<% } %>
 					<% }) %></br>
@@ -176,9 +294,11 @@
 					<% achievements.StreckeMeter.forEach(function(entry){ %>
 						<% if(entry.hasOwnProperty('Wert')){ %>
 							<form action="/achievements" method="post">
-								<input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
-								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
-								<input class="btn btn-primary" type="submit" value="ok"></br></br>
+								<ul>
+									<li style="display:inline-table"><input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %>></li>
+									<li style="display:inline-table"><input type="hidden" name="achievementChange" value= <%= entry.ID %>></li>
+									<li style="display:inline-table"><input class="btn btn-primary" type="submit" value="ok"></br></br></li>
+								</ul>
 							</form>
 						<% } %>
 					<% }) %></br>
@@ -187,85 +307,8 @@
 			
 		<% } %>	
 	</div>
-<!--END Werte als Eingabefelder anzeigen-->
+<!--END Werte bearbeiten-->
 
-<!--START Chart-->
-	<div class="grid_12" id="headlineChart" style="margin-top: 20px"></div>
-	<div class="grid_12" id="chart" style="margin-top: 10px"></div>
-		<% if(achievements){ %>	
-			<script>
-				var data = [];
-			<!--START Attribut Wiederholungen-->
-				<% if(achievements.hasOwnProperty('Wiederholungen')){ %>
-					var i = 1;
-					<% achievements.Wiederholungen.forEach(function(entry){ %>
-						<% if(entry.hasOwnProperty('Wert')){ %>
-							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
-							data.push(WertObj);
-							i++;
-						<% } %>
-					<% }) %>
-				<% } %>
-			<!--END Attribut Wiederholungen-->
-			
-			<!--START Attribut Evaluation-->
-				<% if(achievements.hasOwnProperty('Evaluation')){ %>
-					var i = 1;
-					<% achievements.Evaluation.forEach(function(entry){ %>
-						<% if(entry.hasOwnProperty('Wert')){ %>
-							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
-							data.push(WertObj);
-							i++;
-						<% } %>
-					<% }) %>
-				<% } %>
-			<!--END Attribut Evaluation-->	
-			
-			<!--START Attribut DauerSec-->
-				<% if(achievements.hasOwnProperty('DauerSec')){ %>
-					var i = 1;
-					<% achievements.DauerSec.forEach(function(entry){ %>
-						<% if(entry.hasOwnProperty('Wert')){ %>
-							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
-							data.push(WertObj);
-							i++;
-						<% } %>
-					<% }) %>
-				<% } %>
-			<!--END Attribut DauerSec-->	
-			
-			<!--START Attribut DauerMin-->
-				<% if(achievements.hasOwnProperty('DauerMin')){ %>
-					var i = 1;
-					<% achievements.DauerMin.forEach(function(entry){ %>
-						<% if(entry.hasOwnProperty('Wert')){ %>
-							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
-							data.push(WertObj);
-							i++;
-						<% } %>
-					<% }) %>
-				<% } %>
-			<!--END Attribut DauerMin-->
-
-			<!--START Attribut StreckeMeter-->
-				<% if(achievements.hasOwnProperty('StreckeMeter')){ %>
-					var i = 1;
-					<% achievements.StreckeMeter.forEach(function(entry){ %>
-						<% if(entry.hasOwnProperty('Wert')){ %>
-							var WertObj = {valX: i, valY: <%= entry.Wert %>, Datum: "<%= entry.Datum.toISOString().split("T")[0]; %>"};
-							data.push(WertObj);
-							i++;
-						<% } %>
-					<% }) %>
-				<% } %>
-			<!--END Attribut StreckeMeter-->
-			<!--START Funktion aus der importierten JS zur Ausgabe des Charts aufrufen-->
-				chart(data, "#chart");
-			<!--END Funktion aus der importierten JS zur Ausgabe des Charts aufrufen-->
-			</script>
-		<% } %>		
-	</div>	
-<!--END Chart-->		
 
 <!--START Footer-->	
 	<hr>
@@ -276,7 +319,7 @@
 <!--END Footer-->	
 
     </div>
-<!--END .container_12-->
+<!--END Wrapper-->
 
   </body>
 </html>

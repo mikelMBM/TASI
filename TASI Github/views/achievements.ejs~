@@ -30,8 +30,18 @@
 	if((!(char > 47 && char < 58) || char == 46)){
 
 	}
-  }
+  } 
   
+  	function switcher(){
+		var status = document.getElementById("btnSwitch").value;
+		if(status == "off"){
+			document.getElementById("bearbeiten").style.visibility = "visible";
+			document.getElementById("btnSwitch").value = "on";
+		}else{
+			document.getElementById("bearbeiten").style.visibility = "hidden";
+			document.getElementById("btnSwitch").value = "off";
+		}
+	}
   
 </script>
 
@@ -55,7 +65,7 @@
 
 
   <body>
-<!--START .container_12-->
+<!--START Wrapper-->
     <div class="container_12">
 
 <!--START Menu-->
@@ -66,28 +76,19 @@
 				<li><a  href="/start">Profil</a></li>
 				<li><a  href="/uebungssammlung">√úbungen</a></li>
 				<% if (roleid == 1) { %>
-					<li><a href="/training">Aktuelles Training</a>
+					<li><a>Trainerbereich</a>
 						<ul class='submenu'>
-							<li><a href="/training">Trainingspl√§ne</a></li>
-							<li><a href="/overview">Trainingswerte anzeigen</a></li>
+							<li><a href="/createtrainingplan">Plan erstellen</a></li>
+							<li><a href="/overview">Spielerauswertung</a></li>
+							<li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
 						</ul>
 					</li>
 				<% } %>
 				<% if (roleid == 2) { %>
-					<li><a href="/training">Aktuelles Training</a>
+					<li><a>Mein Training</a>
 						<ul class='submenu'>
 							<li><a href="/training">Trainingspl√§ne</a></li>
-							<li><a href="/tracking">Meine Werte eintragen</a></li>
 							<li><a href="/achievements">Meine Werte anzeigen</a></li>
-						</ul>
-					</li>
-					<li><a href="/spieler">Spielerbereich</a></li>
-				<% } %>
-				<% if (roleid == 1) { %>
-					<li><a href="/trainer">Trainerbereich</a>
-						<ul class='submenu'>
-							<li><a href="/createtrainingplan">Plan erstellen</a></li>
-							<li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
 						</ul>
 					</li>
 				<% } %>
@@ -95,7 +96,7 @@
 			</ul>
 		</div>
 	</div>
-<!--END Menu-->  
+<!--END Menu-->   
 
 <!--START Headline-->
 		  <div class="grid_12" id="werte">
@@ -119,87 +120,22 @@
 					  </optgroup>
 			</select>
 		</form>
-	</div> 
+	</div>
 <!-- END Auswahlmen¸ f¸r ‹bungen-->	
 
-
-<!--START Werte als Eingabefelder anzeigen-->
-	<div class="grid_6">
-		<h3>Ergebnisse</h3><br>		
-
-		<% if(achievements){ %>
-				<% if(achievements.hasOwnProperty('Wiederholungen')){ %>
-					Wiederholungen:
-					<% achievements.Wiederholungen.forEach(function(entry){ %>
-						<% if(entry.hasOwnProperty('Wert')){ %>
-							<form action="/achievements" method="post">
-								<input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
-								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
-								<input class="btn btn-primary" type="submit" value="ok"></br></br>
-							</form>
-						<% } %>
-					<% }) %></br>
-				<% } %>
-				
-				<% if(achievements.hasOwnProperty('Evaluation')){ %>
-					Einsch√§tzung:
-					<% achievements.Evaluation.forEach(function(entry){ %>
-						<% if(entry.hasOwnProperty('Wert')){ %>
-							<form action="/achievements" method="post">
-								<input type="number" step="1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
-								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
-								<input class="btn btn-primary" type="submit" value="ok"></br></br>
-							</form>
-						<% } %>
-					<% }) %></br>
-				<% } %>
-				
-				<% if(achievements.hasOwnProperty('DauerSec')){ %>
-					Dauer in Sekunden:
-					<% achievements.DauerSec.forEach(function(entry){ %>
-						<% if(entry.hasOwnProperty('Wert')){ %>
-							<form action="/achievements" method="post">
-								<input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
-								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
-								<input class="btn btn-primary" type="submit" value="ok"></br></br>
-							</form>
-						<% } %>
-					<% }) %></br>
-				<% } %>
-				
-				<% if(achievements.hasOwnProperty('DauerMin')){ %>
-					Dauer in Minuten:
-					<% achievements.DauerMin.forEach(function(entry){ %>
-						<% if(entry.hasOwnProperty('Wert')){ %>
-							<form action="/achievements" method="post">
-								<input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
-								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
-								<input class="btn btn-primary" type="submit" value="ok"></br></br>
-							</form>
-						<% } %>
-					<% }) %></br>
-				<% } %>		
-				
-				<% if(achievements.hasOwnProperty('StreckeMeter')){ %>
-					Strecke in Meter:
-					<% achievements.StreckeMeter.forEach(function(entry){ %>
-						<% if(entry.hasOwnProperty('Wert')){ %>
-							<form action="/achievements" method="post">
-								<input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></br></br>
-								<input type="hidden" name="achievementChange" value= <%= entry.ID %>>
-								<input class="btn btn-primary" type="submit" value="ok"></br></br>
-							</form>
-						<% } %>
-					<% }) %></br>
-				<% } %>							
-			</form>
-			
-		<% } %>	
-	</div>
-<!--END Werte als Eingabefelder anzeigen-->
+<!--START Headline Uebung-->
+	  <div class="grid_12" id="uebungsbezeichnung" style="margin-top:20px">
+		<% if(selectedUebung){ %>
+			<ul>
+				<li style="display:inline-block; margin-right:10px"><h4><%= selectedUebung[0].Bezeichnung %></h4></li>
+				<li style="display:inline-block; margin-right:10px"><button class="btn" id="btnSwitch" type="button" value="off" onclick="switcher()">Werte bearbeiten</button></li>
+			</ul>	
+		<% } %>
+	  </div>  
+<!--END Headline Uebung-->
 
 <!--START Chart-->
-	<div class="grid_6">
+	<div class="grid_6" id="chart" style="margin-top: 0px; float:left"></div>
 		<% if(achievements){ %>	
 			<script>
 				var data = [];
@@ -268,12 +204,95 @@
 				<% } %>
 			<!--END Attribut StreckeMeter-->
 			<!--START Funktion aus der importierten JS zur Ausgabe des Charts aufrufen-->
-				chart(data);
+				chart(data, "#chart", 700, 500);
 			<!--END Funktion aus der importierten JS zur Ausgabe des Charts aufrufen-->
 			</script>
 		<% } %>		
-	</div>	
-<!--END Chart-->		
+<!--END Chart-->
+
+<!--START Werte bearbeiten-->
+	<div class="grid_2" id="bearbeiten" style="visibility:hidden">
+		<% if(achievements){ %>
+				<% if(achievements.hasOwnProperty('Wiederholungen')){ %>
+					Wiederholungen:
+					<% achievements.Wiederholungen.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							<form action="/achievements" method="post">
+								<ul>
+									<li style="display:inline-table; width:40%"><input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></li>
+									<li style="display:inline-table"><input type="hidden" name="achievementChange" value= <%= entry.ID %>></li>
+									<li style="display:inline-table"><input class="btn btn-primary" type="submit" value="ok"></br></br></li>
+								</ul>
+							</form>
+						<% } %>
+					<% }) %></br>
+				<% } %>
+				
+				<% if(achievements.hasOwnProperty('Evaluation')){ %>
+					Einsch√§tzung:
+					<% achievements.Evaluation.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							<form action="/achievements" method="post">
+								<ul>
+									<li style="display:inline-table"><input type="number" step="1" name="achievementWert" value= <%= entry.Wert %>></li>
+									<li style="display:inline-table"><input type="hidden" name="achievementChange" value= <%= entry.ID %>></li>
+									<li style="display:inline-table"><input class="btn btn-primary" type="submit" value="ok"></br></br></li>
+								</ul>
+							</form>
+						<% } %>
+					<% }) %></br>
+				<% } %>
+				
+				<% if(achievements.hasOwnProperty('DauerSec')){ %>
+					Dauer in Sekunden:
+					<% achievements.DauerSec.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							<form action="/achievements" method="post">
+								<ul>
+									<li style="display:inline-table"><input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></li>
+									<li style="display:inline-table"><input type="hidden" name="achievementChange" value= <%= entry.ID %>></li>
+									<li style="display:inline-table"><input class="btn btn-primary" type="submit" value="ok"></br></br></li>
+								</ul>
+							</form>
+						<% } %>
+					<% }) %></br>
+				<% } %>
+				
+				<% if(achievements.hasOwnProperty('DauerMin')){ %>
+					Dauer in Minuten:
+					<% achievements.DauerMin.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							<form action="/achievements" method="post">
+								<ul>
+									<li style="display:inline-table"><input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %> ></li>
+									<li style="display:inline-table"><input type="hidden" name="achievementChange" value= <%= entry.ID %>></li>
+									<li style="display:inline-table"><input class="btn btn-primary" type="submit" value="ok"></br></br></li>
+								</ul>
+							</form>
+						<% } %>
+					<% }) %></br>
+				<% } %>		
+				
+				<% if(achievements.hasOwnProperty('StreckeMeter')){ %>
+					Strecke in Meter:
+					<% achievements.StreckeMeter.forEach(function(entry){ %>
+						<% if(entry.hasOwnProperty('Wert')){ %>
+							<form action="/achievements" method="post">
+								<ul>
+									<li style="display:inline-table"><input type="number" step="0.1" name="achievementWert" value= <%= entry.Wert %>></li>
+									<li style="display:inline-table"><input type="hidden" name="achievementChange" value= <%= entry.ID %>></li>
+									<li style="display:inline-table"><input class="btn btn-primary" type="submit" value="ok"></br></br></li>
+								</ul>
+							</form>
+						<% } %>
+					<% }) %></br>
+				<% } %>							
+			</form>
+			
+		<% } %>	
+	</div>
+<!--END Werte bearbeiten-->
+
 
 <!--START Footer-->	
 	<hr>
@@ -284,7 +303,7 @@
 <!--END Footer-->	
 
     </div>
-<!--END .container_12-->
+<!--END Wrapper-->
 
   </body>
 </html>

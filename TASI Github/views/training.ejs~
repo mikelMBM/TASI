@@ -1,29 +1,95 @@
 <script>
-  function activate(p1, p2) {
-		var ausguebung = document.getElementsByClassName("list-group-item active");
-		if (ausguebung.length > 0) {
-		  ausguebung["0"].className = "list-group-item";
-		}
-		ausguebung = document.getElementById(p1);
-		ausguebung.className = ausguebung.className + " active";
-	
-		//document.getElementById("uebungsbezeichnung").textContent = p3[p1].Bezeichnung;
+	function listDetails(uebung){
+		var video = uebung.Video;
+		var uebungsname = uebung.Bezeichnung;
+		var uebungskat = uebung.Kategorie;
+		var uebungssubkat = uebung.Unterkategorie;
+		var niveau = uebung.Niveau;
+		var hilfsmittel = "fff";
+		var dauer = uebung.Dauer;
+		var beschreibung = uebung.Beschreibung;
 		
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-		  if(this.readyState == 4 && this.status == 200) {
-			document.getElementById("einzelneuebung").innerHTML = this.responseText;
-		  }
-		};
-		xhttp.open("GET", "/uebunganzeigen/" + p1 + "/" + p2, true);
-		xhttp.send();
-  }
+		document.getElementById("uebungsbezeichnung").innerHTML = '<h4>' + uebungsname + '</h4>';
+		document.getElementById("uebungsvideo").innerHTML = '<iframe src=' + video + ' width="460" height="260" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>'
+		document.getElementById("bereich").innerHTML = '<p>Kategorie: ' + uebungskat +  ' | Unterkategorie: ' + uebungssubkat + ' | Niveau: ' + niveau + ' | Hilfsmittel: ' + hilfsmittel + ' | Dauer: ' + dauer + '</p>';
+		document.getElementById("beschreibung").innerHTML = beschreibung;
+		document.getElementById("btnSwitch").style.visibility = "visible";
+	}  
+	
 
-  function changeplan() {
-		var redir = document.getElementById("plans").options[document.getElementById("plans").selectedIndex].value;
-		var url = "/training/" + redir;
-		window.location.href = url;
-  }
+	function insert(val){
+		var attributes = {uebungsattribut: "1"};
+		for(i=0; i<val.length; i++){
+			if(val[i].name == 1){
+				attributes["1"] = val[i].value;
+			};
+			
+			if(val[i].name == 2){
+				attributes["2"] = val[i].value;
+			};
+			
+			if(val[i].name == 3){
+				attributes["3"] = val[i].value;
+			};
+			
+			if(val[i].name == 4){
+				attributes["4"] = val[i].value;
+			};
+			
+			if(val[i].name == 5){
+				attributes["5"] = val[i].value;
+			};
+		};
+		    $.ajax({
+				url: "/training",
+				method: "POST",            
+				dataType: "JSON",
+				data: attributes,
+				success: function(data){
+					console.log(attributes);
+				}
+			});
+	}
+	
+	function setup(data){
+		document.getElementById("eingabe").innerHTML = "";
+		var inputs = "";
+		data.forEach(function(entry){
+			var labelUebungsattribut = '<label>'+ entry.Bezeichnung + '</label>';	
+			var inputUebungsattribut = '<input type="text" name=' + entry.UebungsattributID + ' placeholder="Ergebnis"><br><br>';
+			inputs += labelUebungsattribut;
+			inputs += inputUebungsattribut;
+		});	
+		var inputUebungsattribut = '<input type="hidden" name="uebungsattribut" value="uebungsattribut">'
+		var btn = '<input type="submit" class="btn" value="eintragen">'
+		document.getElementById("eingabe").innerHTML = '<form onsubmit="insert(this);return false">'+inputUebungsattribut+inputs+btn+'</form><br><br>'
+	}
+	
+	
+	function listEingabe(uebungsID){
+		$.ajax({
+			url: "/training",
+			method: "POST",            
+			dataType: "JSON",
+			data: {	uebungsID: uebungsID },
+			success: function(data) {
+				setup(data);
+			}
+		});
+	}
+	
+	function switcher(){
+		var status = document.getElementById("btnSwitch").value;
+		if(status == "off"){
+			document.getElementById("details").style.visibility = "visible";
+			document.getElementById("btnSwitch").value = "on";
+			document.getElementById("btnSwitch").innerHTML = "Informationen zur √úbung ausblenden";
+		}else{
+			document.getElementById("details").style.visibility = "hidden";
+			document.getElementById("btnSwitch").value = "off";
+			document.getElementById("btnSwitch").innerHTML = "Informationen zur √úbung einblenden";
+		}
+	}
 </script>
 
 <html lang="en">
@@ -36,7 +102,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src='js/menu.js'></script>
-
   </head>
 
 
@@ -51,90 +116,98 @@
 			<ul class='menu'>
 				<li><a  href="/start">Profil</a></li>
 				<li><a  href="/uebungssammlung">√úbungen</a></li>
-				<li><a  href="/training">Training</a></li>
-				
 				<% if (roleid == 1) { %>
-					<li><a href="trainer.html">Trainerbereich</a>
+					<li><a>Trainerbereich</a>
 						<ul class='submenu'>
 							<li><a href="/createtrainingplan">Plan erstellen</a></li>
+							<li><a href="/overview">Spielerauswertung</a></li>
 							<li><a href="/nutzerverwaltung">Nutzerverwaltung</a></li>
 						</ul>
 					</li>
 				<% } %>
-				
-				<% if(roleid == 2) { %>
-					<li><a href="trainerbereich.html">Spielerbereich</a></li>
+				<% if (roleid == 2) { %>
+					<li><a>Mein Training</a>
+						<ul class='submenu'>
+							<li><a href="/training">Trainingspl√§ne</a></li>
+							<li><a href="/achievements">Meine Werte anzeigen</a></li>
+						</ul>
+					</li>
 				<% } %>
-				
 				<li><a href="/logout">Ausloggen</a></li>
 			</ul>
 		</div>
 	</div>
-<!--END Menu-->
+<!--END Menu-->  
 
 <!--START Headline-->
-      <div class="grid_12" id="trainingsbezeichnung">
-        <h1>Trainingspl√§ne</h1>
-      </div>
+		  <div class="grid_12" id="trainingsbezeichnung">
+			<h1>Mein Training</h1>
+		  </div>      
 <!--END Headline-->
 
       <hr>
+      
+<!--START Dropdown Training ausw‰hlen-->
+		<div class="grid_12">
+			<form action="/training" method="post">
+				<select id="plans" class="auswahl" name="trainingsID" style="width: 365px" onchange="this.form.submit()">
+					<option disabled selected>Trainingsplan ausw√§hlen</option>
+					<optgroup label="Bestehende Pl√§ne">
+						<% for(entry of allplans) { %>
+						  <option value='<%= entry.TrainingsID %>'><%=entry.Bezeichnung %></option>
+						<% } %>
+					</optgroup>
+				</select>
+			</form>
+		</div><br></br>  
+<!--END Dropdown Training ausw‰hlen-->  
 
-<!--START Dropdown Trainingsplan-->
-      <div class="grid_12">
-        <select id="plans" class="auswahl" name="Spieler" style="width: 365px" onchange="changeplan()">
-          <option disabled selected>Trainingsplan ausw√§hlen</option>
-          <optgroup label="Bestehende Pl√§ne">
-            <% for(entry of allplans) { %>
-              <option value='<%= entry.TrainingsID %>'><%=entry.Bezeichnung %></option>
-            <% } %>
-          </optgroup>
-        </select>
-      </div><br></br>      
-<!--END Dropdown Trainingsplan-->
-
-<!--START ‹bungsbeschreibung-->
-      <div id="einzelneuebung">
-			<div class="grid_6" id="uebungsbezeichnung">
-				  <h4><%= uebung[0].Bezeichnung %></h4>
-			</div>
-
-			<div class="grid_6">
-				  <h4><%= trainingsbezeichnung %></h4>
-			</div>
-
-			<div class="grid_6">
-				  <iframe src="<%= uebung[0].Video %>" width="460" height="260" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe><br>
-		
-				  <div id="bereich">
-					<p>Kategorie: <%= uebung[0].Kategorie %> | Unterkategorie: <%= uebung[0].Unterkategorie %> | Niveau: <%= uebung[0].Niveau %> | Hilfsmittel: <%= uebung[0].Hilfsmittel %> | Dauer: <%= uebung[0].Dauer %></p>
-				  </div>
-		
-				  <%= uebung[0].Beschreibung %></br></br>
-			</div>
-      </div>
-<!--END ‹bungsbeschreibung-->
 
 <!--START ‹bungen auflisten-->
-      <div class="grid_6">
+	  <div class="grid_12" id="trainingsbezeichnung">
+		<% if(training){ %>
+			<h4><%= training[0].Bezeichnung %></h4>
+		<% } %>
+	  </div>   
+
+      <div class="grid_6" style="float:left">
 			<div class="list-group">
 				<% var i = 1; %>
-				<% for(let entry of uebung) { %>
-				  <a href="#" class="list-group-item" id="<%= entry.UebungsID %>" name="<%= i %>" onclick="activate(this.id, document.getElementById('trainingsbezeichnung').textContent)">
-					  <h4 class="list-group-item-heading"><%= entry.Bezeichnung %></h4>
-					  <p class="list-group-item-text">Kategorie: <%= entry.Kategorie %> |  Niveau: <%= entry.Niveau %> | Hilfsmittel: <%= entry.Hilfsmittel %> | Dauer: <%= entry.Dauer %></p>
-				  </a>
-				  <% i++; %>
+				<% if(uebung){ %>
+					<% for(let entry of uebung) { %>
+						<% var details = JSON.stringify(entry);%>
+						<a href="#" class="list-group-item" id="<%= entry.UebungsID %>" name="<%= i %>" onclick="listDetails(<%= details %>); listEingabe(<%= entry.UebungsID %>);">
+						  <h4 class="list-group-item-heading"><%= entry.Bezeichnung %></h4>
+						  <p class="list-group-item-text">Kategorie: <%= entry.Kategorie %> |  Niveau: <%= entry.Niveau %> | Hilfsmittel: <%= entry.Hilfsmittel %> | Dauer: <%= entry.Dauer %></p>
+						</a>
+						<% i++; %>
+					<% }; %>
 				<% }; %>
 			</div>
       </div>
 <!--END ‹bungen auflisten-->
 
+<!--START Werte eingeben-->
+	<div id="eingabe" class="grid_6"></div>
+<!--START Werte eingeben-->
+
+<div class="grid_6"><button class="btn" id="btnSwitch" type="button" value="off" onclick="switcher()" style="visibility:hidden">Informationen zur √úbung anzeigen</button></div>
+
+
+<!--START ‹bungsdetails-->
+	<div id="details" class="grid_6" style="visibility:hidden; margin-top:20px; margin-right:auto;">
+		<div class="grid_6" id="uebungsbezeichnung"></div>
+		<div class="grid_6" id="uebungsvideo"></div>
+		<div class="grid_6" id="bereich"></div>
+		<div class="grid_6" id="beschreibung"></div>
+		<br><br> 
+	</div>
+<!--END ‹bungsdetails-->
+
       <hr>
-      
 <!--START Footer-->
       <div class="grid_6">
-        <p align="right">Kontakt | Impressum </p>
+      	<p align="right">Kontakt | Impressum </p>
       </div>
 <!--END Footer-->
 
@@ -143,3 +216,5 @@
 
   </body>
 </html>
+
+
