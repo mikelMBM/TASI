@@ -167,7 +167,23 @@ router.post("/adduebung", (req, res) => {
 
 //ROUTE uebunganzeigen
 router.get("/uebunganzeigen/:id/:training", (req,res) => {
+
+	var getUebungsattribute = function(uebungsID, callback){
+		var attributeIDs = [];
+		squery = "SELECT UebungsattributID FROM attributzuweisung WHERE UebungsID = " + uebungsID;	
+		connection.query(squery, function(err, result) {
+			for(entry of result){
+				attributeIDs.push(entry.UebungsattributID);	
+			}
+			squery = "SELECT * FROM uebungsattribute WHERE UebungsattributID IN (" + attributeIDs + ")" ;
+			connection.query(squery, function(err, result) {
+				callback(result);
+			});  
+		});
+	}
+	
     var ueb = req.params.id;
+    session.uebungsID = ueb;
     var training = req.params.training;
     var squery =    "SELECT Bezeichnung, Kategorie, Unterkategorie, Niveau, Dauer, Beschreibung, Video " +
                     "FROM uebungen " +
@@ -204,13 +220,23 @@ router.get("/uebunganzeigen/:id/:training", (req,res) => {
                     i++;
                 }
             }
-
-            res.write('<div class="grid_6" id="uebungsbezeichnung"><h4>' + uebungsname + '</h4></div>');
-            res.write('<div class="grid_6"><h4>' + training + '</h4></div>');
-            res.write('<div class="grid_6"><iframe src="' + video + '" width="460" height="260" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>');
-            res.write('<div id="bereich"><p>Kategorie: ' + uebungskat + ' | Unterkategorie: ' + uebungssubkat + ' | Niveau: ' + niveau + ' | Hilfsmittel: ' + hilfsmittel + ' | Dauer: ' + dauer + '</p></div>');
-            res.write(beschreibung + ' <br><br>');
-            res.end();
+            
+           getUebungsattribute(ueb, function(uebungsattribute){
+           		var attributes ='';
+				uebungsattribute.forEach(function(entry){
+					attributes += '<label>' + entry.Bezeichnung + '</label><br>';
+					attributes += '<input type="text" name="' + entry.UebungsattributID + '" placeholder="Ergebnis"><br><br>';
+				});
+				res.write('<div class="grid_6" id="ergebnisse"><h4>Ergebnisse eintragen:</h4><form onSubmit="insert(this); return false"><input type="hidden" name="uebungsattribut" value="uebungsattribut">' + attributes + '<input class="btn" type="submit" value="eintragen"></form></div></br><br>');
+           		res.write('<div class="grid_6"><button class="btn-link" id="switch" value="off" onclick="details(this.value)">Informationen zur  Übung einblenden</button></div>');
+				res.write('<div class="grid_6" id="uebungsdetails" style="visibility:hidden; margin-top:20px">');
+				res.write('<div class="grid_6" id="uebungsbezeichnung"><h4>' + uebungsname + '</h4></div>');
+				res.write('<div class="grid_6"><iframe src="' + video + '" width="460" height="260" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>');
+				res.write('<div id="bereich"><p>Kategorie: ' + uebungskat + ' | Unterkategorie: ' + uebungssubkat + ' | Niveau: ' + niveau + ' | Hilfsmittel: ' + hilfsmittel + ' | Dauer: ' + dauer + '</p></div>');
+				res.write(beschreibung + ' <br><br>');   
+				res.write('</div>');
+				res.end();
+           });
         });
     });
 });
